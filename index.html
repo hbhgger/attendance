@@ -1,0 +1,4296 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>학급 출결 및 NEIS 후속조치 관리 시스템 | 허보현</title>
+
+
+  <style>
+    /* 스크롤바 커스텀 및 모바일 터치 하이라이트 제거 */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f8fafc;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    body {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.96);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .anim-slide-up {
+      animation: slideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .anim-fade-in {
+      animation: fadeIn 0.18s ease-out forwards;
+    }
+  </style>
+  <style>
+    *,
+    ::before,
+    ::after {
+      --tw-border-spacing-x: 0;
+      --tw-border-spacing-y: 0;
+      --tw-translate-x: 0;
+      --tw-translate-y: 0;
+      --tw-rotate: 0;
+      --tw-skew-x: 0;
+      --tw-skew-y: 0;
+      --tw-scale-x: 1;
+      --tw-scale-y: 1;
+      --tw-pan-x: ;
+      --tw-pan-y: ;
+      --tw-pinch-zoom: ;
+      --tw-scroll-snap-strictness: proximity;
+      --tw-gradient-from-position: ;
+      --tw-gradient-via-position: ;
+      --tw-gradient-to-position: ;
+      --tw-ordinal: ;
+      --tw-slashed-zero: ;
+      --tw-numeric-figure: ;
+      --tw-numeric-spacing: ;
+      --tw-numeric-fraction: ;
+      --tw-ring-inset: ;
+      --tw-ring-offset-width: 0px;
+      --tw-ring-offset-color: #fff;
+      --tw-ring-color: rgb(59 130 246 / 0.5);
+      --tw-ring-offset-shadow: 0 0 #0000;
+      --tw-ring-shadow: 0 0 #0000;
+      --tw-shadow: 0 0 #0000;
+      --tw-shadow-colored: 0 0 #0000;
+      --tw-blur: ;
+      --tw-brightness: ;
+      --tw-contrast: ;
+      --tw-grayscale: ;
+      --tw-hue-rotate: ;
+      --tw-invert: ;
+      --tw-saturate: ;
+      --tw-sepia: ;
+      --tw-drop-shadow: ;
+      --tw-backdrop-blur: ;
+      --tw-backdrop-brightness: ;
+      --tw-backdrop-contrast: ;
+      --tw-backdrop-grayscale: ;
+      --tw-backdrop-hue-rotate: ;
+      --tw-backdrop-invert: ;
+      --tw-backdrop-opacity: ;
+      --tw-backdrop-saturate: ;
+      --tw-backdrop-sepia: ;
+      --tw-contain-size: ;
+      --tw-contain-layout: ;
+      --tw-contain-paint: ;
+      --tw-contain-style:
+    }
+
+    ::backdrop {
+      --tw-border-spacing-x: 0;
+      --tw-border-spacing-y: 0;
+      --tw-translate-x: 0;
+      --tw-translate-y: 0;
+      --tw-rotate: 0;
+      --tw-skew-x: 0;
+      --tw-skew-y: 0;
+      --tw-scale-x: 1;
+      --tw-scale-y: 1;
+      --tw-pan-x: ;
+      --tw-pan-y: ;
+      --tw-pinch-zoom: ;
+      --tw-scroll-snap-strictness: proximity;
+      --tw-gradient-from-position: ;
+      --tw-gradient-via-position: ;
+      --tw-gradient-to-position: ;
+      --tw-ordinal: ;
+      --tw-slashed-zero: ;
+      --tw-numeric-figure: ;
+      --tw-numeric-spacing: ;
+      --tw-numeric-fraction: ;
+      --tw-ring-inset: ;
+      --tw-ring-offset-width: 0px;
+      --tw-ring-offset-color: #fff;
+      --tw-ring-color: rgb(59 130 246 / 0.5);
+      --tw-ring-offset-shadow: 0 0 #0000;
+      --tw-ring-shadow: 0 0 #0000;
+      --tw-shadow: 0 0 #0000;
+      --tw-shadow-colored: 0 0 #0000;
+      --tw-blur: ;
+      --tw-brightness: ;
+      --tw-contrast: ;
+      --tw-grayscale: ;
+      --tw-hue-rotate: ;
+      --tw-invert: ;
+      --tw-saturate: ;
+      --tw-sepia: ;
+      --tw-drop-shadow: ;
+      --tw-backdrop-blur: ;
+      --tw-backdrop-brightness: ;
+      --tw-backdrop-contrast: ;
+      --tw-backdrop-grayscale: ;
+      --tw-backdrop-hue-rotate: ;
+      --tw-backdrop-invert: ;
+      --tw-backdrop-opacity: ;
+      --tw-backdrop-saturate: ;
+      --tw-backdrop-sepia: ;
+      --tw-contain-size: ;
+      --tw-contain-layout: ;
+      --tw-contain-paint: ;
+      --tw-contain-style:
+    }
+
+    /* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */
+    *,
+    ::after,
+    ::before {
+      box-sizing: border-box;
+      border-width: 0;
+      border-style: solid;
+      border-color: #e5e7eb
+    }
+
+    ::after,
+    ::before {
+      --tw-content: ''
+    }
+
+    :host,
+    html {
+      line-height: 1.5;
+      -webkit-text-size-adjust: 100%;
+      -moz-tab-size: 4;
+      tab-size: 4;
+      font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, Noto Sans KR, Malgun Gothic, sans-serif;
+      font-feature-settings: normal;
+      font-variation-settings: normal;
+      -webkit-tap-highlight-color: transparent
+    }
+
+    body {
+      margin: 0;
+      line-height: inherit
+    }
+
+    hr {
+      height: 0;
+      color: inherit;
+      border-top-width: 1px
+    }
+
+    abbr:where([title]) {
+      -webkit-text-decoration: underline dotted;
+      text-decoration: underline dotted
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-size: inherit;
+      font-weight: inherit
+    }
+
+    a {
+      color: inherit;
+      text-decoration: inherit
+    }
+
+    b,
+    strong {
+      font-weight: bolder
+    }
+
+    code,
+    kbd,
+    pre,
+    samp {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-feature-settings: normal;
+      font-variation-settings: normal;
+      font-size: 1em
+    }
+
+    small {
+      font-size: 80%
+    }
+
+    sub,
+    sup {
+      font-size: 75%;
+      line-height: 0;
+      position: relative;
+      vertical-align: baseline
+    }
+
+    sub {
+      bottom: -.25em
+    }
+
+    sup {
+      top: -.5em
+    }
+
+    table {
+      text-indent: 0;
+      border-color: inherit;
+      border-collapse: collapse
+    }
+
+    button,
+    input,
+    optgroup,
+    select,
+    textarea {
+      font-family: inherit;
+      font-feature-settings: inherit;
+      font-variation-settings: inherit;
+      font-size: 100%;
+      font-weight: inherit;
+      line-height: inherit;
+      letter-spacing: inherit;
+      color: inherit;
+      margin: 0;
+      padding: 0
+    }
+
+    button,
+    select {
+      text-transform: none
+    }
+
+    button,
+    input:where([type=button]),
+    input:where([type=reset]),
+    input:where([type=submit]) {
+      -webkit-appearance: button;
+      background-color: transparent;
+      background-image: none
+    }
+
+    :-moz-focusring {
+      outline: auto
+    }
+
+    :-moz-ui-invalid {
+      box-shadow: none
+    }
+
+    progress {
+      vertical-align: baseline
+    }
+
+    ::-webkit-inner-spin-button,
+    ::-webkit-outer-spin-button {
+      height: auto
+    }
+
+    [type=search] {
+      -webkit-appearance: textfield;
+      outline-offset: -2px
+    }
+
+    ::-webkit-search-decoration {
+      -webkit-appearance: none
+    }
+
+    ::-webkit-file-upload-button {
+      -webkit-appearance: button;
+      font: inherit
+    }
+
+    summary {
+      display: list-item
+    }
+
+    blockquote,
+    dd,
+    dl,
+    figure,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    hr,
+    p,
+    pre {
+      margin: 0
+    }
+
+    fieldset {
+      margin: 0;
+      padding: 0
+    }
+
+    legend {
+      padding: 0
+    }
+
+    menu,
+    ol,
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0
+    }
+
+    dialog {
+      padding: 0
+    }
+
+    textarea {
+      resize: vertical
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      opacity: 1;
+      color: #9ca3af
+    }
+
+    [role=button],
+    button {
+      cursor: pointer
+    }
+
+    :disabled {
+      cursor: default
+    }
+
+    audio,
+    canvas,
+    embed,
+    iframe,
+    img,
+    object,
+    svg,
+    video {
+      display: block;
+      vertical-align: middle
+    }
+
+    img,
+    video {
+      max-width: 100%;
+      height: auto
+    }
+
+    [hidden]:where(:not([hidden=until-found])) {
+      display: none
+    }
+
+    .pointer-events-none {
+      pointer-events: none
+    }
+
+    .fixed {
+      position: fixed
+    }
+
+    .absolute {
+      position: absolute
+    }
+
+    .relative {
+      position: relative
+    }
+
+    .sticky {
+      position: sticky
+    }
+
+    .inset-0 {
+      inset: 0px
+    }
+
+    .bottom-6 {
+      bottom: 1.5rem
+    }
+
+    .left-1\/2 {
+      left: 50%
+    }
+
+    .left-3 {
+      left: 0.75rem
+    }
+
+    .right-2\.5 {
+      right: 0.625rem
+    }
+
+    .top-0 {
+      top: 0px
+    }
+
+    .top-1\/2 {
+      top: 50%
+    }
+
+    .z-30 {
+      z-index: 30
+    }
+
+    .z-50 {
+      z-index: 50
+    }
+
+    .col-span-2 {
+      grid-column: span 2 / span 2
+    }
+
+    .mx-auto {
+      margin-left: auto;
+      margin-right: auto
+    }
+
+    .mb-1 {
+      margin-bottom: 0.25rem
+    }
+
+    .mb-1\.5 {
+      margin-bottom: 0.375rem
+    }
+
+    .mb-2 {
+      margin-bottom: 0.5rem
+    }
+
+    .mb-3 {
+      margin-bottom: 0.75rem
+    }
+
+    .mt-0\.5 {
+      margin-top: 0.125rem
+    }
+
+    .mt-1 {
+      margin-top: 0.25rem
+    }
+
+    .mt-1\.5 {
+      margin-top: 0.375rem
+    }
+
+    .mt-12 {
+      margin-top: 3rem
+    }
+
+    .mt-2 {
+      margin-top: 0.5rem
+    }
+
+    .block {
+      display: block
+    }
+
+    .inline-block {
+      display: inline-block
+    }
+
+    .flex {
+      display: flex
+    }
+
+    .inline-flex {
+      display: inline-flex
+    }
+
+    .grid {
+      display: grid
+    }
+
+    .hidden {
+      display: none
+    }
+
+    .h-10 {
+      height: 2.5rem
+    }
+
+    .h-12 {
+      height: 3rem
+    }
+
+    .h-3\.5 {
+      height: 0.875rem
+    }
+
+    .h-4 {
+      height: 1rem
+    }
+
+    .h-5 {
+      height: 1.25rem
+    }
+
+    .h-6 {
+      height: 1.5rem
+    }
+
+    .h-1\.5 {
+      height: 0.375rem
+    }
+
+    .h-3 {
+      height: 0.75rem
+    }
+
+    .max-h-24 {
+      max-height: 6rem
+    }
+
+    .max-h-\[90vh\] {
+      max-height: 90vh
+    }
+
+    .min-h-screen {
+      min-height: 100vh
+    }
+
+    .w-10 {
+      width: 2.5rem
+    }
+
+    .w-12 {
+      width: 3rem
+    }
+
+    .w-14 {
+      width: 3.5rem
+    }
+
+    .w-20 {
+      width: 5rem
+    }
+
+    .w-24 {
+      width: 6rem
+    }
+
+    .w-28 {
+      width: 7rem
+    }
+
+    .w-3\.5 {
+      width: 0.875rem
+    }
+
+    .w-4 {
+      width: 1rem
+    }
+
+    .w-40 {
+      width: 10rem
+    }
+
+    .w-48 {
+      width: 12rem
+    }
+
+    .w-5 {
+      width: 1.25rem
+    }
+
+    .w-6 {
+      width: 1.5rem
+    }
+
+    .w-full {
+      width: 100%
+    }
+
+    .w-px {
+      width: 1px
+    }
+
+    .w-1\.5 {
+      width: 0.375rem
+    }
+
+    .w-3 {
+      width: 0.75rem
+    }
+
+    .max-w-7xl {
+      max-width: 80rem
+    }
+
+    .max-w-lg {
+      max-width: 32rem
+    }
+
+    .max-w-md {
+      max-width: 28rem
+    }
+
+    .max-w-sm {
+      max-width: 24rem
+    }
+
+    .max-w-xl {
+      max-width: 36rem
+    }
+
+    .max-w-\[165px\] {
+      max-width: 165px
+    }
+
+    .max-w-\[180px\] {
+      max-width: 180px
+    }
+
+    .flex-1 {
+      flex: 1 1 0%
+    }
+
+    .border-collapse {
+      border-collapse: collapse
+    }
+
+    .-translate-x-1\/2 {
+      --tw-translate-x: -50%;
+      transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+    }
+
+    .-translate-y-0 {
+      --tw-translate-y: -0px;
+      transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+    }
+
+    .-translate-y-1\/2 {
+      --tw-translate-y: -50%;
+      transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+    }
+
+    .scale-95 {
+      --tw-scale-x: .95;
+      --tw-scale-y: .95;
+      transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+    }
+
+    @keyframes ping {
+
+      75%,
+      100% {
+        transform: scale(2);
+        opacity: 0
+      }
+    }
+
+    .animate-ping {
+      animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite
+    }
+
+    .cursor-not-allowed {
+      cursor: not-allowed
+    }
+
+    .cursor-pointer {
+      cursor: pointer
+    }
+
+    .select-none {
+      -webkit-user-select: none;
+      user-select: none
+    }
+
+    .grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr))
+    }
+
+    .grid-cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr))
+    }
+
+    .grid-cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr))
+    }
+
+    .flex-col {
+      flex-direction: column
+    }
+
+    .flex-wrap {
+      flex-wrap: wrap
+    }
+
+    .items-start {
+      align-items: flex-start
+    }
+
+    .items-end {
+      align-items: flex-end
+    }
+
+    .items-center {
+      align-items: center
+    }
+
+    .items-baseline {
+      align-items: baseline
+    }
+
+    .justify-center {
+      justify-content: center
+    }
+
+    .justify-between {
+      justify-content: space-between
+    }
+
+    .gap-1 {
+      gap: 0.25rem
+    }
+
+    .gap-1\.5 {
+      gap: 0.375rem
+    }
+
+    .gap-2 {
+      gap: 0.5rem
+    }
+
+    .gap-2\.5 {
+      gap: 0.625rem
+    }
+
+    .gap-3 {
+      gap: 0.75rem
+    }
+
+    .gap-4 {
+      gap: 1rem
+    }
+
+    .space-y-1> :not([hidden])~ :not([hidden]) {
+      --tw-space-y-reverse: 0;
+      margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));
+      margin-bottom: calc(0.25rem * var(--tw-space-y-reverse))
+    }
+
+    .space-y-2> :not([hidden])~ :not([hidden]) {
+      --tw-space-y-reverse: 0;
+      margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
+      margin-bottom: calc(0.5rem * var(--tw-space-y-reverse))
+    }
+
+    .space-y-3> :not([hidden])~ :not([hidden]) {
+      --tw-space-y-reverse: 0;
+      margin-top: calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));
+      margin-bottom: calc(0.75rem * var(--tw-space-y-reverse))
+    }
+
+    .space-y-4> :not([hidden])~ :not([hidden]) {
+      --tw-space-y-reverse: 0;
+      margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+      margin-bottom: calc(1rem * var(--tw-space-y-reverse))
+    }
+
+    .space-y-5> :not([hidden])~ :not([hidden]) {
+      --tw-space-y-reverse: 0;
+      margin-top: calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));
+      margin-bottom: calc(1.25rem * var(--tw-space-y-reverse))
+    }
+
+    .space-y-6> :not([hidden])~ :not([hidden]) {
+      --tw-space-y-reverse: 0;
+      margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
+      margin-bottom: calc(1.5rem * var(--tw-space-y-reverse))
+    }
+
+    .divide-y> :not([hidden])~ :not([hidden]) {
+      --tw-divide-y-reverse: 0;
+      border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
+      border-bottom-width: calc(1px * var(--tw-divide-y-reverse))
+    }
+
+    .divide-slate-100> :not([hidden])~ :not([hidden]) {
+      --tw-divide-opacity: 1;
+      border-color: rgb(241 245 249 / var(--tw-divide-opacity, 1))
+    }
+
+    .overflow-hidden {
+      overflow: hidden
+    }
+
+    .overflow-x-auto {
+      overflow-x: auto
+    }
+
+    .overflow-y-auto {
+      overflow-y: auto
+    }
+
+    .truncate {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap
+    }
+
+    .rounded {
+      border-radius: 0.25rem
+    }
+
+    .rounded-2xl {
+      border-radius: 1rem
+    }
+
+    .rounded-3xl {
+      border-radius: 1.5rem
+    }
+
+    .rounded-full {
+      border-radius: 9999px
+    }
+
+    .rounded-lg {
+      border-radius: 0.5rem
+    }
+
+    .rounded-md {
+      border-radius: 0.375rem
+    }
+
+    .rounded-xl {
+      border-radius: 0.75rem
+    }
+
+    .rounded-t-3xl {
+      border-top-left-radius: 1.5rem;
+      border-top-right-radius: 1.5rem
+    }
+
+    .border {
+      border-width: 1px
+    }
+
+    .border-2 {
+      border-width: 2px
+    }
+
+    .border-b {
+      border-bottom-width: 1px
+    }
+
+    .border-t {
+      border-top-width: 1px
+    }
+
+    .border-amber-200 {
+      --tw-border-opacity: 1;
+      border-color: rgb(253 230 138 / var(--tw-border-opacity, 1))
+    }
+
+    .border-amber-200\/60 {
+      border-color: rgb(253 230 138 / 0.6)
+    }
+
+    .border-emerald-100 {
+      --tw-border-opacity: 1;
+      border-color: rgb(209 250 229 / var(--tw-border-opacity, 1))
+    }
+
+    .border-emerald-200 {
+      --tw-border-opacity: 1;
+      border-color: rgb(167 243 208 / var(--tw-border-opacity, 1))
+    }
+
+    .border-indigo-200 {
+      --tw-border-opacity: 1;
+      border-color: rgb(199 210 254 / var(--tw-border-opacity, 1))
+    }
+
+    .border-indigo-300 {
+      --tw-border-opacity: 1;
+      border-color: rgb(165 180 252 / var(--tw-border-opacity, 1))
+    }
+
+    .border-rose-200 {
+      --tw-border-opacity: 1;
+      border-color: rgb(254 205 211 / var(--tw-border-opacity, 1))
+    }
+
+    .border-slate-100 {
+      --tw-border-opacity: 1;
+      border-color: rgb(241 245 249 / var(--tw-border-opacity, 1))
+    }
+
+    .border-slate-200 {
+      --tw-border-opacity: 1;
+      border-color: rgb(226 232 240 / var(--tw-border-opacity, 1))
+    }
+
+    .border-slate-200\/80 {
+      border-color: rgb(226 232 240 / 0.8)
+    }
+
+    .border-slate-200\/90 {
+      border-color: rgb(226 232 240 / 0.9)
+    }
+
+    .border-amber-100 {
+      --tw-border-opacity: 1;
+      border-color: rgb(254 243 199 / var(--tw-border-opacity, 1))
+    }
+
+    .border-emerald-600 {
+      --tw-border-opacity: 1;
+      border-color: rgb(5 150 105 / var(--tw-border-opacity, 1))
+    }
+
+    .border-purple-100 {
+      --tw-border-opacity: 1;
+      border-color: rgb(243 232 255 / var(--tw-border-opacity, 1))
+    }
+
+    .border-rose-100 {
+      --tw-border-opacity: 1;
+      border-color: rgb(255 228 230 / var(--tw-border-opacity, 1))
+    }
+
+    .border-slate-200\/70 {
+      border-color: rgb(226 232 240 / 0.7)
+    }
+
+    .border-slate-300 {
+      --tw-border-opacity: 1;
+      border-color: rgb(203 213 225 / var(--tw-border-opacity, 1))
+    }
+
+    .bg-amber-50 {
+      --tw-bg-opacity: 1;
+      background-color: rgb(255 251 235 / var(--tw-bg-opacity, 1))
+    }
+
+    .bg-amber-50\/60 {
+      background-color: rgb(255 251 235 / 0.6)
+    }
+
+    .bg-emerald-100 {
+      --tw-bg-opacity: 1;
+      background-color: rgb(209 250 229 / var(--tw-bg-opacity, 1))
+    }
+
+    .bg-emerald-50 {
+      --tw-bg-opacity: 1;
+      background-color: rgb(236 253 245 / var(--tw-bg-opacity, 1))
+    }
+
+    .bg-emerald-600 {
+      --tw-bg-opacity: 1;
+      background-color: rgb(5 150 105 / var(--tw-bg-opacity, 1))
+    }
+
+    .bg-indigo-100 {
+      --tw-bg-opacity: 1;
+      background-color: rgb(224 231 255 / var(--tw-bg-opacity, 1))
+    }
+
+    .bg-indigo-50 {
+      --tw-bg-opacity: 1;
+      background-color: rgb(238 242 255 / var(--tw-bg-opacity, 1))
+    }
+
+    .bg-indigo-600 {
+      --tw-bg-opacity: 1;
+      background-color: rgb(79 70 229 / var(--tw-bg-opacity, 1))
+    }
+
+    .bg-rose-50 {
+      --tw-bg-opacity: 1;
+      background-color: rgb(255 241 242 / var(--tw-bg-opacity, 1))
+    }
+
+    .bg-slate-100 {
+      --tw-bg-opacity: 1;
+      background-color: rgb(241 245 249 / var(--tw-bg-opacity, 1))
+    }
+
+    .bg-slate-200 {
+      --tw-bg-opacity: 1;
+      background-color: rgb(226 232 240 / var(--tw-bg-opacity, 1))
+    }
+
+    .bg-slate-50 {
+      --tw-bg-opacity: 1;
+      background-color: rgb(248 250 252 / var(--tw-bg-opacity, 1))
+    }
+
+    .bg-slate-50\/80 {
+      background-color: rgb(248 250 252 / 0.8)
+    }
+
+    .bg-slate-900 {
+      --tw-bg-opacity: 1;
+      background-color: rgb(15 23 42 / var(--tw-bg-opacity, 1))
+    }
+
+    .bg-slate-900\/50 {
+      background-color: rgb(15 23 42 / 0.5)
+    }
+
+    .bg-slate-900\/60 {
+      background-color: rgb(15 23 42 / 0.6)
+    }
+
+    .bg-white {
+      --tw-bg-opacity: 1;
+      background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1))
+    }
+
+    .bg-white\/20 {
+      background-color: rgb(255 255 255 / 0.2)
+    }
+
+    .bg-white\/70 {
+      background-color: rgb(255 255 255 / 0.7)
+    }
+
+    .bg-amber-100 {
+      --tw-bg-opacity: 1;
+      background-color: rgb(254 243 199 / var(--tw-bg-opacity, 1))
+    }
+
+    .bg-amber-50\/20 {
+      background-color: rgb(255 251 235 / 0.2)
+    }
+
+    .bg-blue-100 {
+      --tw-bg-opacity: 1;
+      background-color: rgb(219 234 254 / var(--tw-bg-opacity, 1))
+    }
+
+    .bg-emerald-50\/20 {
+      background-color: rgb(236 253 245 / 0.2)
+    }
+
+    .bg-purple-100 {
+      --tw-bg-opacity: 1;
+      background-color: rgb(243 232 255 / var(--tw-bg-opacity, 1))
+    }
+
+    .bg-purple-50\/20 {
+      background-color: rgb(250 245 255 / 0.2)
+    }
+
+    .bg-rose-100 {
+      --tw-bg-opacity: 1;
+      background-color: rgb(255 228 230 / var(--tw-bg-opacity, 1))
+    }
+
+    .bg-rose-50\/20 {
+      background-color: rgb(255 241 242 / 0.2)
+    }
+
+    .bg-rose-500 {
+      --tw-bg-opacity: 1;
+      background-color: rgb(244 63 94 / var(--tw-bg-opacity, 1))
+    }
+
+    .bg-slate-50\/40 {
+      background-color: rgb(248 250 252 / 0.4)
+    }
+
+    .bg-slate-50\/50 {
+      background-color: rgb(248 250 252 / 0.5)
+    }
+
+    .bg-gradient-to-r {
+      background-image: linear-gradient(to right, var(--tw-gradient-stops))
+    }
+
+    .from-indigo-600 {
+      --tw-gradient-from: #4f46e5 var(--tw-gradient-from-position);
+      --tw-gradient-to: rgb(79 70 229 / 0) var(--tw-gradient-to-position);
+      --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to)
+    }
+
+    .to-indigo-800 {
+      --tw-gradient-to: #3730a3 var(--tw-gradient-to-position)
+    }
+
+    .p-0 {
+      padding: 0px
+    }
+
+    .p-1 {
+      padding: 0.25rem
+    }
+
+    .p-1\.5 {
+      padding: 0.375rem
+    }
+
+    .p-2 {
+      padding: 0.5rem
+    }
+
+    .p-2\.5 {
+      padding: 0.625rem
+    }
+
+    .p-3 {
+      padding: 0.75rem
+    }
+
+    .p-4 {
+      padding: 1rem
+    }
+
+    .p-5 {
+      padding: 1.25rem
+    }
+
+    .p-6 {
+      padding: 1.5rem
+    }
+
+    .p-0\.5 {
+      padding: 0.125rem
+    }
+
+    .px-2 {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem
+    }
+
+    .px-2\.5 {
+      padding-left: 0.625rem;
+      padding-right: 0.625rem
+    }
+
+    .px-3 {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem
+    }
+
+    .px-4 {
+      padding-left: 1rem;
+      padding-right: 1rem
+    }
+
+    .px-5 {
+      padding-left: 1.25rem;
+      padding-right: 1.25rem
+    }
+
+    .py-0\.5 {
+      padding-top: 0.125rem;
+      padding-bottom: 0.125rem
+    }
+
+    .py-1 {
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem
+    }
+
+    .py-1\.5 {
+      padding-top: 0.375rem;
+      padding-bottom: 0.375rem
+    }
+
+    .py-2 {
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem
+    }
+
+    .py-2\.5 {
+      padding-top: 0.625rem;
+      padding-bottom: 0.625rem
+    }
+
+    .py-3 {
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem
+    }
+
+    .py-3\.5 {
+      padding-top: 0.875rem;
+      padding-bottom: 0.875rem
+    }
+
+    .py-4 {
+      padding-top: 1rem;
+      padding-bottom: 1rem
+    }
+
+    .py-6 {
+      padding-top: 1.5rem;
+      padding-bottom: 1.5rem
+    }
+
+    .px-1\.5 {
+      padding-left: 0.375rem;
+      padding-right: 0.375rem
+    }
+
+    .pb-2 {
+      padding-bottom: 0.5rem
+    }
+
+    .pl-8 {
+      padding-left: 2rem
+    }
+
+    .pl-9 {
+      padding-left: 2.25rem
+    }
+
+    .pr-3 {
+      padding-right: 0.75rem
+    }
+
+    .pr-7 {
+      padding-right: 1.75rem
+    }
+
+    .pt-1 {
+      padding-top: 0.25rem
+    }
+
+    .pt-2 {
+      padding-top: 0.5rem
+    }
+
+    .text-left {
+      text-align: left
+    }
+
+    .text-center {
+      text-align: center
+    }
+
+    .text-2xl {
+      font-size: 1.5rem;
+      line-height: 2rem
+    }
+
+    .text-\[11px\] {
+      font-size: 11px
+    }
+
+    .text-base {
+      font-size: 1rem;
+      line-height: 1.5rem
+    }
+
+    .text-sm {
+      font-size: 0.875rem;
+      line-height: 1.25rem
+    }
+
+    .text-xl {
+      font-size: 1.25rem;
+      line-height: 1.75rem
+    }
+
+    .text-xs {
+      font-size: 0.75rem;
+      line-height: 1rem
+    }
+
+    .text-\[10px\] {
+      font-size: 10px
+    }
+
+    .font-black {
+      font-weight: 900
+    }
+
+    .font-bold {
+      font-weight: 700
+    }
+
+    .font-medium {
+      font-weight: 500
+    }
+
+    .font-normal {
+      font-weight: 400
+    }
+
+    .font-semibold {
+      font-weight: 600
+    }
+
+    .font-extrabold {
+      font-weight: 800
+    }
+
+    .leading-relaxed {
+      line-height: 1.625
+    }
+
+    .tracking-\[0\.5em\] {
+      letter-spacing: 0.5em
+    }
+
+    .tracking-tight {
+      letter-spacing: -0.025em
+    }
+
+    .tracking-wide {
+      letter-spacing: 0.025em
+    }
+
+    .text-amber-900 {
+      --tw-text-opacity: 1;
+      color: rgb(120 53 15 / var(--tw-text-opacity, 1))
+    }
+
+    .text-emerald-400 {
+      --tw-text-opacity: 1;
+      color: rgb(52 211 153 / var(--tw-text-opacity, 1))
+    }
+
+    .text-emerald-600 {
+      --tw-text-opacity: 1;
+      color: rgb(5 150 105 / var(--tw-text-opacity, 1))
+    }
+
+    .text-emerald-700 {
+      --tw-text-opacity: 1;
+      color: rgb(4 120 87 / var(--tw-text-opacity, 1))
+    }
+
+    .text-emerald-900 {
+      --tw-text-opacity: 1;
+      color: rgb(6 78 59 / var(--tw-text-opacity, 1))
+    }
+
+    .text-indigo-100 {
+      --tw-text-opacity: 1;
+      color: rgb(224 231 255 / var(--tw-text-opacity, 1))
+    }
+
+    .text-indigo-200 {
+      --tw-text-opacity: 1;
+      color: rgb(199 210 254 / var(--tw-text-opacity, 1))
+    }
+
+    .text-indigo-600 {
+      --tw-text-opacity: 1;
+      color: rgb(79 70 229 / var(--tw-text-opacity, 1))
+    }
+
+    .text-indigo-700 {
+      --tw-text-opacity: 1;
+      color: rgb(67 56 202 / var(--tw-text-opacity, 1))
+    }
+
+    .text-indigo-800 {
+      --tw-text-opacity: 1;
+      color: rgb(55 48 163 / var(--tw-text-opacity, 1))
+    }
+
+    .text-rose-500 {
+      --tw-text-opacity: 1;
+      color: rgb(244 63 94 / var(--tw-text-opacity, 1))
+    }
+
+    .text-rose-600 {
+      --tw-text-opacity: 1;
+      color: rgb(225 29 72 / var(--tw-text-opacity, 1))
+    }
+
+    .text-rose-700 {
+      --tw-text-opacity: 1;
+      color: rgb(190 18 60 / var(--tw-text-opacity, 1))
+    }
+
+    .text-slate-300 {
+      --tw-text-opacity: 1;
+      color: rgb(203 213 225 / var(--tw-text-opacity, 1))
+    }
+
+    .text-slate-400 {
+      --tw-text-opacity: 1;
+      color: rgb(148 163 184 / var(--tw-text-opacity, 1))
+    }
+
+    .text-slate-500 {
+      --tw-text-opacity: 1;
+      color: rgb(100 116 139 / var(--tw-text-opacity, 1))
+    }
+
+    .text-slate-600 {
+      --tw-text-opacity: 1;
+      color: rgb(71 85 105 / var(--tw-text-opacity, 1))
+    }
+
+    .text-slate-700 {
+      --tw-text-opacity: 1;
+      color: rgb(51 65 85 / var(--tw-text-opacity, 1))
+    }
+
+    .text-slate-800 {
+      --tw-text-opacity: 1;
+      color: rgb(30 41 59 / var(--tw-text-opacity, 1))
+    }
+
+    .text-slate-900 {
+      --tw-text-opacity: 1;
+      color: rgb(15 23 42 / var(--tw-text-opacity, 1))
+    }
+
+    .text-white {
+      --tw-text-opacity: 1;
+      color: rgb(255 255 255 / var(--tw-text-opacity, 1))
+    }
+
+    .text-amber-700 {
+      --tw-text-opacity: 1;
+      color: rgb(180 83 9 / var(--tw-text-opacity, 1))
+    }
+
+    .text-amber-800 {
+      --tw-text-opacity: 1;
+      color: rgb(146 64 14 / var(--tw-text-opacity, 1))
+    }
+
+    .text-blue-800 {
+      --tw-text-opacity: 1;
+      color: rgb(30 64 175 / var(--tw-text-opacity, 1))
+    }
+
+    .text-purple-600 {
+      --tw-text-opacity: 1;
+      color: rgb(147 51 234 / var(--tw-text-opacity, 1))
+    }
+
+    .text-purple-700 {
+      --tw-text-opacity: 1;
+      color: rgb(126 34 206 / var(--tw-text-opacity, 1))
+    }
+
+    .text-purple-800 {
+      --tw-text-opacity: 1;
+      color: rgb(107 33 168 / var(--tw-text-opacity, 1))
+    }
+
+    .text-rose-800 {
+      --tw-text-opacity: 1;
+      color: rgb(159 18 57 / var(--tw-text-opacity, 1))
+    }
+
+    .line-through {
+      -webkit-text-decoration-line: line-through;
+      text-decoration-line: line-through
+    }
+
+    .antialiased {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale
+    }
+
+    .opacity-0 {
+      opacity: 0
+    }
+
+    .shadow-2xl {
+      --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+      --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
+      box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+    }
+
+    .shadow-lg {
+      --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+      box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+    }
+
+    .shadow-md {
+      --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
+      box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+    }
+
+    .shadow-sm {
+      --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+      box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+    }
+
+    .shadow-xl {
+      --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+      --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+      box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+    }
+
+    .shadow-emerald-200 {
+      --tw-shadow-color: #a7f3d0;
+      --tw-shadow: var(--tw-shadow-colored)
+    }
+
+    .shadow-indigo-100 {
+      --tw-shadow-color: #e0e7ff;
+      --tw-shadow: var(--tw-shadow-colored)
+    }
+
+    .shadow-indigo-200 {
+      --tw-shadow-color: #c7d2fe;
+      --tw-shadow: var(--tw-shadow-colored)
+    }
+
+    .backdrop-blur-md {
+      --tw-backdrop-blur: blur(12px);
+      -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+      backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)
+    }
+
+    .backdrop-blur-sm {
+      --tw-backdrop-blur: blur(4px);
+      -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+      backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)
+    }
+
+    .transition-all {
+      transition-property: all;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 150ms
+    }
+
+    .transition-colors {
+      transition-property: color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 150ms
+    }
+
+    .duration-300 {
+      transition-duration: 300ms
+    }
+
+    .selection\:bg-indigo-500 *::selection {
+      --tw-bg-opacity: 1;
+      background-color: rgb(99 102 241 / var(--tw-bg-opacity, 1))
+    }
+
+    .selection\:text-white *::selection {
+      --tw-text-opacity: 1;
+      color: rgb(255 255 255 / var(--tw-text-opacity, 1))
+    }
+
+    .selection\:bg-indigo-500::selection {
+      --tw-bg-opacity: 1;
+      background-color: rgb(99 102 241 / var(--tw-bg-opacity, 1))
+    }
+
+    .selection\:text-white::selection {
+      --tw-text-opacity: 1;
+      color: rgb(255 255 255 / var(--tw-text-opacity, 1))
+    }
+
+    .hover\:border-indigo-500:hover {
+      --tw-border-opacity: 1;
+      border-color: rgb(99 102 241 / var(--tw-border-opacity, 1))
+    }
+
+    .hover\:bg-emerald-700:hover {
+      --tw-bg-opacity: 1;
+      background-color: rgb(4 120 87 / var(--tw-bg-opacity, 1))
+    }
+
+    .hover\:bg-indigo-100:hover {
+      --tw-bg-opacity: 1;
+      background-color: rgb(224 231 255 / var(--tw-bg-opacity, 1))
+    }
+
+    .hover\:bg-indigo-700:hover {
+      --tw-bg-opacity: 1;
+      background-color: rgb(67 56 202 / var(--tw-bg-opacity, 1))
+    }
+
+    .hover\:bg-rose-100:hover {
+      --tw-bg-opacity: 1;
+      background-color: rgb(255 228 230 / var(--tw-bg-opacity, 1))
+    }
+
+    .hover\:bg-slate-100:hover {
+      --tw-bg-opacity: 1;
+      background-color: rgb(241 245 249 / var(--tw-bg-opacity, 1))
+    }
+
+    .hover\:bg-slate-200:hover {
+      --tw-bg-opacity: 1;
+      background-color: rgb(226 232 240 / var(--tw-bg-opacity, 1))
+    }
+
+    .hover\:bg-slate-50:hover {
+      --tw-bg-opacity: 1;
+      background-color: rgb(248 250 252 / var(--tw-bg-opacity, 1))
+    }
+
+    .hover\:bg-white:hover {
+      --tw-bg-opacity: 1;
+      background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1))
+    }
+
+    .hover\:bg-emerald-100:hover {
+      --tw-bg-opacity: 1;
+      background-color: rgb(209 250 229 / var(--tw-bg-opacity, 1))
+    }
+
+    .hover\:bg-slate-50\/70:hover {
+      background-color: rgb(248 250 252 / 0.7)
+    }
+
+    .hover\:text-indigo-600:hover {
+      --tw-text-opacity: 1;
+      color: rgb(79 70 229 / var(--tw-text-opacity, 1))
+    }
+
+    .hover\:text-slate-600:hover {
+      --tw-text-opacity: 1;
+      color: rgb(71 85 105 / var(--tw-text-opacity, 1))
+    }
+
+    .hover\:text-slate-700:hover {
+      --tw-text-opacity: 1;
+      color: rgb(51 65 85 / var(--tw-text-opacity, 1))
+    }
+
+    .hover\:text-rose-600:hover {
+      --tw-text-opacity: 1;
+      color: rgb(225 29 72 / var(--tw-text-opacity, 1))
+    }
+
+    .focus\:border-indigo-600:focus {
+      --tw-border-opacity: 1;
+      border-color: rgb(79 70 229 / var(--tw-border-opacity, 1))
+    }
+
+    .focus\:bg-white:focus {
+      --tw-bg-opacity: 1;
+      background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1))
+    }
+
+    .focus\:outline-none:focus {
+      outline: 2px solid transparent;
+      outline-offset: 2px
+    }
+
+    .focus\:ring-2:focus {
+      --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+      --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+      box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)
+    }
+
+    .focus\:ring-indigo-500:focus {
+      --tw-ring-opacity: 1;
+      --tw-ring-color: rgb(99 102 241 / var(--tw-ring-opacity, 1))
+    }
+
+    .focus\:ring-indigo-500\/20:focus {
+      --tw-ring-color: rgb(99 102 241 / 0.2)
+    }
+
+    .active\:scale-95:active {
+      --tw-scale-x: .95;
+      --tw-scale-y: .95;
+      transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+    }
+
+    @media (min-width: 640px) {
+      .sm\:col-span-1 {
+        grid-column: span 1 / span 1
+      }
+
+      .sm\:block {
+        display: block
+      }
+
+      .sm\:inline {
+        display: inline
+      }
+
+      .sm\:w-64 {
+        width: 16rem
+      }
+
+      .sm\:grid-cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr))
+      }
+
+      .sm\:items-center {
+        align-items: center
+      }
+
+      .sm\:rounded-3xl {
+        border-radius: 1.5rem
+      }
+
+      .sm\:p-4 {
+        padding: 1rem
+      }
+
+      .sm\:px-6 {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem
+      }
+
+      .sm\:text-2xl {
+        font-size: 1.5rem;
+        line-height: 2rem
+      }
+
+      .sm\:text-lg {
+        font-size: 1.125rem;
+        line-height: 1.75rem
+      }
+    }
+
+    @media (min-width: 768px) {
+      .md\:block {
+        display: block
+      }
+
+      .md\:inline {
+        display: inline
+      }
+
+      .md\:hidden {
+        display: none
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .lg\:grid-cols-5 {
+        grid-template-columns: repeat(5, minmax(0, 1fr))
+      }
+    }
+
+    /* ===== CDN 없이 동작하도록 보충한 유틸리티 (사전 생성 CSS에 빠져 있던 클래스) ===== */
+    .bg-amber-600 {
+      background-color: #d97706
+    }
+
+    .bg-rose-600 {
+      background-color: #e11d48
+    }
+
+    @keyframes pulse {
+      50% {
+        opacity: .5
+      }
+    }
+
+    .animate-pulse {
+      animation: pulse 2s cubic-bezier(.4, 0, .6, 1) infinite
+    }
+
+    /* ===== 추가 컴포넌트 (x- 접두사) ===== */
+    .x-hint {
+      margin-top: .375rem;
+      font-size: 11px;
+      line-height: 1.55;
+      color: #64748b
+    }
+
+    .x-hint.hidden {
+      display: none
+    }
+
+    .x-hint code {
+      padding: 0 .25rem;
+      border-radius: .25rem;
+      background: #f1f5f9;
+      color: #334155
+    }
+
+    .x-sync-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .5rem .75rem;
+      border-radius: .75rem;
+      border: 1px solid #c7d2fe;
+      background: #eef2ff;
+      color: #4338ca;
+      font-size: .75rem;
+      font-weight: 700;
+      cursor: pointer
+    }
+
+    .x-sync-btn:hover {
+      background: #e0e7ff
+    }
+
+    .x-sync-btn[disabled] {
+      opacity: .6;
+      cursor: progress
+    }
+
+    .x-sync-status {
+      padding: .125rem .5rem;
+      border-radius: 9999px;
+      background: #fff;
+      color: #64748b;
+      font-size: 10px;
+      font-weight: 700
+    }
+
+    .x-sync-status.is-error {
+      background: #fff1f2;
+      color: #be123c
+    }
+
+    .x-sync-status.is-ok {
+      background: #ecfdf5;
+      color: #047857
+    }
+
+    .x-notice {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: .5rem;
+      padding: .75rem 1rem;
+      border-radius: 1rem;
+      border: 1px solid #fde68a;
+      background: #fffbeb;
+      color: #92400e;
+      font-size: .75rem;
+      font-weight: 600
+    }
+
+    .x-notice.hidden {
+      display: none
+    }
+
+    .x-notice button {
+      padding: .25rem .625rem;
+      border-radius: .5rem;
+      background: #fff;
+      border: 1px solid #fcd34d;
+      font-weight: 700;
+      cursor: pointer
+    }
+
+    .x-src-badge {
+      display: inline-block;
+      margin-left: .25rem;
+      padding: 0 .375rem;
+      border-radius: .375rem;
+      background: #e0e7ff;
+      color: #4338ca;
+      font-size: 10px;
+      font-weight: 800;
+      vertical-align: middle
+    }
+
+    .x-date-chip {
+      display: inline-block;
+      margin-bottom: .125rem;
+      padding: 0 .375rem;
+      border-radius: .375rem;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 10px;
+      font-weight: 700
+    }
+
+    .x-privacy {
+      padding: .75rem 1rem;
+      border-radius: 1rem;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      color: #475569;
+      font-size: 11px
+    }
+
+    .x-privacy summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: #334155
+    }
+
+    .x-privacy ul {
+      margin-top: .5rem;
+      padding-left: 1rem;
+      list-style: disc;
+      line-height: 1.7
+    }
+
+    .x-panel {
+      width: 100%;
+      max-width: 36rem;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border-radius: 1.5rem;
+      background: #fff;
+      box-shadow: 0 25px 50px -12px rgb(0 0 0 / .25)
+    }
+
+    .x-panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #f1f5f9
+    }
+
+    .x-panel-head h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0f172a
+    }
+
+    .x-panel-body {
+      padding: 0 1.25rem 1.25rem;
+      overflow-y: auto
+    }
+
+    .x-icon-btn {
+      padding: .25rem .5rem;
+      border-radius: .5rem;
+      color: #94a3b8;
+      font-size: 1rem;
+      cursor: pointer
+    }
+
+    .x-icon-btn:hover {
+      background: #f1f5f9;
+      color: #334155
+    }
+
+    .x-section {
+      padding-top: 1rem;
+      margin-top: 1rem;
+      border-top: 1px solid #f1f5f9;
+      font-size: .75rem
+    }
+
+    .x-section:first-child {
+      margin-top: 0;
+      border-top: 0
+    }
+
+    .x-section h4 {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .8125rem;
+      font-weight: 800;
+      color: #1e293b
+    }
+
+    .x-badge {
+      padding: .0625rem .5rem;
+      border-radius: 9999px;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 10px;
+      font-weight: 800
+    }
+
+    .x-badge.is-ok {
+      background: #d1fae5;
+      color: #047857
+    }
+
+    .x-badge.is-error {
+      background: #ffe4e6;
+      color: #be123c
+    }
+
+    .x-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-top: .5rem
+    }
+
+    .x-input {
+      width: 100%;
+      margin-top: .5rem;
+      padding: .5rem .75rem;
+      border-radius: .75rem;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      font-size: .75rem
+    }
+
+    .x-row .x-input {
+      flex: 1 1 12rem;
+      width: auto;
+      margin-top: 0
+    }
+
+    .x-input:focus {
+      outline: none;
+      border-color: #4f46e5;
+      background: #fff
+    }
+
+    .x-mono {
+      font-family: ui-monospace, Consolas, monospace;
+      line-height: 1.6
+    }
+
+    .x-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .25rem;
+      padding: .5rem .75rem;
+      border-radius: .75rem;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      color: #334155;
+      font-size: .75rem;
+      font-weight: 700;
+      cursor: pointer
+    }
+
+    .x-btn:hover {
+      background: #f1f5f9
+    }
+
+    .x-btn-primary {
+      border-color: #4f46e5;
+      background: #4f46e5;
+      color: #fff
+    }
+
+    .x-btn-primary:hover {
+      background: #4338ca
+    }
+
+    .x-btn-danger {
+      border-color: #fecdd3;
+      background: #fff1f2;
+      color: #be123c
+    }
+
+    .x-btn-danger:hover {
+      background: #ffe4e6
+    }
+  </style>
+</head>
+
+<body
+  class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+  <div id="app-wrapper" class="w-full">
+    <!-- 상단 글로벌 네비게이션 헤더 -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold shadow-md shadow-indigo-100">
+            <!-- CheckCheck SVG 아이콘 -->
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2.2"
+              strokelinecap="round" strokelinejoin="round">
+              <path d="M18 6 7 17l-5-5"></path>
+              <path d="m22 10-7.5 7.5L13 16"></path>
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-base sm:text-lg font-bold text-slate-900 tracking-tight">학급 출결 및 NEIS 후속조치 데스크</h1>
+              <span data-cfg="classLabel"
+                class="px-2 py-0.5 text-xs font-semibold rounded-md bg-indigo-50 text-indigo-700 border border-indigo-200">2학년
+                3반</span>
+            </div>
+            <p class="text-xs text-slate-500">당일 출결 접수 · 학부모 연락 · 증빙 서류 · 나이스(NEIS) 대사 관리</p>
+          </div>
+        </div>
+
+        <div id="header-actions" class="flex items-center gap-2 flex-wrap">
+          <!-- 학생 신고 폼 모드 전환 버튼 (전환하는 순간 교사 화면은 잠김) -->
+          <button id="btn-toggle-view"
+            class="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-xl text-xs font-bold transition-all shadow-sm active:scale-95"
+            title="학생 신고 폼으로 전환합니다. 전환하면 교사 화면은 자동으로 잠깁니다.">
+            <svg class="w-3.5 h-3.5 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect>
+              <path d="M12 18h.01"></path>
+            </svg>
+            <span id="btn-toggle-view-text">📱 학생 신고 폼 열기</span>
+          </button>
+
+          <!-- CSV 내보내기 버튼 -->
+          <button id="btn-export-csv"
+            class="teacher-only-ctrl flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-medium border border-slate-200 transition-all"
+            title="전체 기간 기록을 엑셀 / 한셀용 CSV 파일로 내보냅니다.">
+            <svg class="w-3.5 h-3.5 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+            <span>CSV</span>
+          </button>
+
+          <!-- 설정 (명단 · 신고함 연결 · 백업/복원 · PIN) -->
+          <button id="btn-open-settings"
+            class="teacher-only-ctrl flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-medium border border-slate-200 transition-all"
+            title="학생 명단 · 신고함 연결 · 백업/복원 · PIN 변경">
+            <svg class="w-3.5 h-3.5 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z">
+              </path>
+            </svg>
+            <span>설정</span>
+          </button>
+
+          <!-- 교사 화면 잠금 버튼 -->
+          <button id="btn-lock-screen"
+            class="teacher-only-ctrl flex items-center gap-1.5 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-xl text-xs font-bold transition-all shadow-sm active:scale-95"
+            title="자리를 비울 때 누르면 즉시 화면이 잠기고 학생 신고 폼으로 전환됩니다. (10분 동안 입력이 없으면 자동 잠금)">
+            <svg class="w-3.5 h-3.5 text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <span>화면 잠금 🔒</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+      <!-- 교사용 관리 데스크 컨테이너 -->
+      <div id="view-teacher-dashboard" class="space-y-6">
+        <!-- 날짜 선택 및 빠른 출결 접수 툴바 -->
+        <div
+          class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="flex items-center bg-slate-100 rounded-xl p-1 border border-slate-200/80">
+              <button id="btn-prev-day" class="p-1.5 hover:bg-white text-slate-600 rounded-lg transition-colors"
+                title="이전 날짜">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+              </button>
+              <span id="label-selected-date" class="px-3 text-xs font-bold text-slate-800 tracking-tight">2026.10.21(수)
+                · 오늘</span>
+              <button id="btn-next-day" class="p-1.5 hover:bg-white text-slate-600 rounded-lg transition-colors"
+                title="다음 날짜">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+            </div>
+            <button id="btn-today"
+              class="px-2.5 py-1.5 text-xs font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-xl transition-all hidden">
+              오늘로 이동
+            </button>
+            <input type="date" id="input-date-picker" value=""
+              class="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
+          </div>
+
+          <div class="flex items-center gap-2 flex-wrap">
+            <!-- 학생 신고함 (Google Apps Script) 확인 -->
+            <button id="btn-sync" type="button" class="x-sync-btn"
+              title="학생들이 보낸 출결 신고를 지금 가져옵니다. (화면이 열려 있으면 2분마다 자동 확인)">
+              <span>📥 신고함 확인</span>
+              <span id="sync-status" class="x-sync-status">미연결</span>
+            </button>
+            <button id="btn-open-modal"
+              class="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-100">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" x2="12" y1="5" y2="19"></line>
+                <line x1="5" x2="19" y1="12" y2="12"></line>
+              </svg>
+              <span>빠른 출결 등록</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 초기 설정 안내 (명단 미등록 · 신고함 미연결 · 백업 알림) -->
+        <div id="setup-notice" class="x-notice hidden"></div>
+
+        <!-- 일일 요약 KPI 카드 그리드 -->
+        <div id="kpi-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        </div>
+
+        <!-- 미결 업무 필터 탭 & 검색 툴바 -->
+        <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div id="filter-tabs" class="flex flex-wrap gap-1.5 items-center">
+            </div>
+            <div class="relative w-full sm:w-64">
+              <svg class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+              </svg>
+              <input type="text" id="input-search" placeholder="학생 번호, 이름, 사유 검색"
+                class="w-full pl-8 pr-7 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
+              <button id="btn-clear-search"
+                class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 6 6 18"></path>
+                  <path d="m6 6 12 12"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 데스크톱용 인라인 퀵 에디트 테이블 -->
+        <div class="hidden md:block bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-50/80 border-b border-slate-200 text-slate-600 font-bold">
+                  <th class="py-3 px-4 text-center w-14">번호</th>
+                  <th class="py-3 px-3 w-28">성명/학번</th>
+                  <th class="py-3 px-3 text-center w-20">근태구분</th>
+                  <th class="py-3 px-3 text-center w-20">사유범주</th>
+                  <th class="py-3 px-4">상세 사유</th>
+                  <th class="py-3 px-3 text-center w-28">등교교시 (지각)</th>
+                  <th class="py-3 px-3 text-center w-28">증빙서류</th>
+                  <th class="py-3 px-3 w-48">학부모 연락 (클릭변경)</th>
+                  <th class="py-3 px-3 text-center w-24">NEIS 반영</th>
+                  <th class="py-3 px-3 text-center w-12">삭제</th>
+                </tr>
+              </thead>
+              <tbody id="desktop-table-body" class="divide-y divide-slate-100 font-normal">
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 모바일 카드 리스트 뷰 -->
+        <div id="mobile-card-list" class="md:hidden space-y-3">
+        </div>
+      </div>
+
+      <!-- 학생 전용 온라인 출결 신고 화면 (QR/모바일 웹 공유용) -->
+      <div id="view-student-portal" class="hidden max-w-xl mx-auto space-y-5 anim-fade-in">
+        <!-- 학생용 화면 상단 배너 카드 -->
+        <div class="bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-3xl p-6 text-white shadow-xl">
+          <div class="flex items-center justify-between mb-3">
+            <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold tracking-wide">
+              <span data-cfg="classLabel">2학년 3반</span> 학생 출결 신고센터
+            </span>
+            <span class="text-xs text-indigo-200">담임: <span data-cfg="teacherName">허보현</span> 선생님</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black mb-1.5">학생 출결 신고 폼</h2>
+          <p class="text-xs text-indigo-100 leading-relaxed">
+            결석, 지각, 조퇴 등의 사유가 발생했을 때 학생이 담임선생님께 직접 편하게 알리는 온라인 신고 폼입니다.
+          </p>
+        </div>
+
+        <!-- 학생 제출 폼 -->
+        <form id="form-student-submit"
+          class="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm space-y-5 text-xs">
+          <!-- 1. 학생 본인 확인 -->
+          <div>
+            <label class="block text-slate-800 font-bold mb-2 text-sm">
+              1. 학생 정보 <span class="text-rose-500">*</span>
+            </label>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[11px] text-slate-500 mb-1">출석 번호</label>
+                <select id="student-form-number"
+                  class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                  required="">
+                  <option value="">번호 선택</option>
+                  <!-- JS로 번호 옵션 렌더링 (이름은 공개 페이지에 싣지 않음) -->
+                </select>
+              </div>
+              <div id="student-code-box" class="hidden">
+                <label class="block text-[11px] text-slate-500 mb-1">개인 확인 코드</label>
+                <input type="password" id="student-form-code" inputmode="numeric" maxlength="6" autocomplete="off"
+                  placeholder="선생님께 받은 코드"
+                  class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
+              </div>
+            </div>
+            <p class="x-hint">이름은 적지 않아요. 번호만 고르면 선생님 화면에서 이름과 연결됩니다.</p>
+          </div>
+
+          <!-- 2. 출결 구분 및 일자 -->
+          <div>
+            <label class="block text-slate-800 font-bold mb-2 text-sm">
+              2. 근태 종류 및 발생 일자 <span class="text-rose-500">*</span>
+            </label>
+            <div class="grid grid-cols-4 gap-2 mb-3" id="student-form-type-group">
+              <button type="button" data-val="결석"
+                class="btn-portal-type py-2.5 rounded-xl font-bold bg-slate-900 text-white shadow-sm">결석</button>
+              <button type="button" data-val="지각"
+                class="btn-portal-type py-2.5 rounded-xl font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">지각</button>
+              <button type="button" data-val="조퇴"
+                class="btn-portal-type py-2.5 rounded-xl font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">조퇴</button>
+              <button type="button" data-val="결과"
+                class="btn-portal-type py-2.5 rounded-xl font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">결과</button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[11px] text-slate-500 mb-1">신고 일자</label>
+                <input type="date" id="student-form-date" value=""
+                  class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                  required="">
+              </div>
+              <div>
+                <label class="block text-[11px] text-slate-500 mb-1">사유 범주</label>
+                <select id="student-form-category"
+                  class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
+                  <option value="질병">질병 (감기, 복통, 두통 등)</option>
+                  <option value="인정">인정 (경조사, 체험학습 등)</option>
+                  <option value="기타">기타 · 잘 모르겠음</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- 지각 등교 예정 교시 (지각일 경우만 노출) -->
+          <div id="student-portal-late-box" class="hidden p-3 bg-amber-50 rounded-2xl border border-amber-200">
+            <label class="block text-amber-900 font-bold mb-1.5">예상 등교 교시</label>
+            <select id="student-form-period"
+              class="w-full p-2 bg-white border border-amber-200 rounded-xl font-semibold text-amber-900">
+              <option value="">등교 시간 미정 (도착 시 보고)</option>
+              <option value="1">1교시 등교 예정</option>
+              <option value="2">2교시 등교 예정</option>
+              <option value="3">3교시 등교 예정</option>
+              <option value="4">4교시 등교 예정</option>
+              <option value="5">5교시 등교 예정</option>
+              <option value="6">6교시 등교 예정</option>
+              <option value="7">7교시 등교 예정</option>
+            </select>
+          </div>
+
+          <!-- 3. 구체적 사유 작성 -->
+          <div>
+            <label class="block text-slate-800 font-bold mb-1.5 text-sm">
+              3. 상세 사유 <span class="text-rose-500">*</span>
+            </label>
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              <button type="button"
+                class="btn-portal-quick-reason px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-700 font-semibold transition-colors">감기</button>
+              <button type="button"
+                class="btn-portal-quick-reason px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-700 font-semibold transition-colors">복통</button>
+              <button type="button"
+                class="btn-portal-quick-reason px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-700 font-semibold transition-colors">두통</button>
+              <button type="button"
+                class="btn-portal-quick-reason px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-700 font-semibold transition-colors">어지럼증</button>
+              <button type="button"
+                class="btn-portal-quick-reason px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-700 font-semibold transition-colors">몸살</button>
+              <button type="button"
+                class="btn-portal-quick-reason px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-700 font-semibold transition-colors">병원
+                진료</button>
+              <button type="button"
+                class="btn-portal-quick-reason px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-700 font-semibold transition-colors">가족
+                경조사</button>
+            </div>
+            <textarea id="student-form-reason" rows="2" maxlength="100"
+              placeholder="위 버튼을 누르거나 짧게 적어 주세요 (예: 감기, 병원 진료)"
+              class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              required=""></textarea>
+            <p class="x-hint">⚠️ 병명·검사 결과 같은 자세한 건강 정보는 적지 마세요. 필요한 내용은 선생님이 직접 확인합니다.</p>
+          </div>
+
+          <!-- 4. 보호자(부모님) 연락 확인 체크란 -->
+          <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2">
+            <label class="block text-slate-900 font-bold text-sm">
+              4. 보호자(부모님) 사전 연락 확인 <span class="text-rose-500">*</span>
+            </label>
+            <label class="flex items-start gap-2.5 pt-1 cursor-pointer select-none">
+              <input type="checkbox" id="student-form-agree"
+                class="w-4 h-4 mt-0.5 text-indigo-600 rounded focus:ring-indigo-500 cursor-pointer" required="">
+              <span class="text-slate-700 text-xs font-medium leading-relaxed">
+                신고하기 전 보호자(부모님)께 근태 사실을 먼저 말씀드렸으며, 부모님께서 담임선생님께 근태 발생을 알리는 문자를 보내주셨는지 확인했습니다.
+              </span>
+            </label>
+          </div>
+
+          <!-- 개인정보 수집·이용 안내 -->
+          <details class="x-privacy">
+            <summary>개인정보 수집·이용 안내 (눌러서 보기)</summary>
+            <ul>
+              <li><b>수집 항목</b>: 출석 번호, 근태 종류, 날짜, 사유 범주, 짧은 사유, (지각 시) 등교 예정 교시</li>
+              <li><b>목적</b>: 학급 출결 확인 및 처리 (이름은 수집하지 않음)</li>
+              <li><b>보관</b>: 담임선생님이 확인한 뒤 신고함에서 삭제하며, 확인하지 않아도 최대 <span data-cfg="retentionDays">7</span>일 뒤 자동 삭제</li>
+              <li><b>열람</b>: 담임선생님만 볼 수 있습니다.</li>
+            </ul>
+          </details>
+
+          <!-- 제출 버튼 -->
+          <button type="submit" id="btn-student-submit"
+            class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white rounded-2xl font-bold text-sm shadow-lg shadow-indigo-200 transition-all flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span id="btn-student-submit-text">담임선생님께 출결 신고하기</span>
+          </button>
+        </form>
+
+        <!-- 학생 제출 완료 확인 영수증 카드 (제출 시 노출) -->
+        <div id="student-portal-receipt"
+          class="hidden bg-emerald-50 border border-emerald-200 rounded-3xl p-6 text-center space-y-3 anim-fade-in">
+          <div
+            class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl mx-auto flex items-center justify-center shadow-sm">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <h3 class="text-base font-bold text-emerald-900">담임선생님 신고함에 접수되었습니다</h3>
+          <p id="receipt-details-text" class="text-xs text-emerald-700 leading-relaxed font-medium">
+            출결 신고가 접수되었습니다.
+          </p>
+          <div class="bg-white p-3 rounded-2xl border border-emerald-100 text-left text-xs text-slate-600 space-y-1">
+            <div class="flex justify-between"><span>접수 상태</span><span class="font-bold text-emerald-600">선생님 확인
+                대기중</span></div>
+            <div class="flex justify-between"><span>보호자 연락</span><span class="font-semibold text-indigo-600">학생 체크함
+                (선생님이 확인 예정)</span></div>
+            <div class="flex justify-between"><span>증빙 서류 안내</span><span class="font-semibold text-slate-700">등교 시
+                증빙서류(진료확인서 등) 제출</span></div>
+          </div>
+          <button type="button" id="btn-receipt-new-submit"
+            class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm">
+            다시 작성하기
+          </button>
+        </div>
+
+        <!-- 교사 대시보드로 복귀 (보안 PIN 인증 보호) -->
+        <div id="return-teacher-wrap" class="text-center pt-2">
+          <button type="button" id="btn-return-teacher"
+            class="inline-flex items-center gap-1.5 px-4 py-2 bg-white hover:bg-slate-50 text-slate-600 hover:text-indigo-600 rounded-xl border border-slate-200 shadow-sm text-xs font-bold transition-all">
+            <svg class="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <span>담임교사용 관리 데스크 로그인 (PIN 인증)</span>
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer class="mt-12 border-t border-slate-200/80 bg-white/70 py-6 text-center">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center gap-2">
+      <div class="flex items-center gap-2">
+        <span
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
+          <svg class="w-3.5 h-3.5 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path
+              d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z">
+            </path>
+          </svg>
+          제작자: 허보현
+        </span>
+        <span class="text-xs text-slate-300">|</span>
+        <span class="text-xs font-medium text-slate-600">선생님을 위한 스마트 학급 출결 시스템</span>
+      </div>
+      <p class="text-[11px] text-slate-400">
+        © 2026 담임 스마트 출결 및 NEIS 후속조치 데스크. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <!-- 빠른 출결 등록 모달 -->
+  <div id="modal-container"
+    class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/50 backdrop-blur-sm p-0 sm:p-4 hidden">
+    <div
+      class="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-3xl shadow-2xl max-h-[90vh] flex flex-col overflow-hidden anim-slide-up">
+      <!-- 모달 헤더 -->
+      <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+        <div>
+          <h3 class="font-bold text-slate-900 text-base">빠른 출결 등록</h3>
+          <p id="modal-date-subtitle" class="text-xs text-slate-400">일자: 오늘 (2학년 3반)</p>
+        </div>
+        <button id="btn-close-modal"
+          class="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- 모달 입력 폼 -->
+      <form id="form-attendance" class="p-5 overflow-y-auto space-y-4 text-xs">
+        <!-- 1. 학생 선택 -->
+        <div>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="font-bold text-slate-800">1. 대상 학생 선택 <span class="text-rose-500">*</span></label>
+            <span id="selected-student-badge" class="text-xs font-bold text-indigo-600 hidden">선택됨</span>
+          </div>
+          <div class="relative mb-2">
+            <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.3-4.3"></path>
+            </svg>
+            <input type="text" id="modal-student-search" placeholder="번호 또는 이름 검색 (예: 3)"
+              class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
+          </div>
+          <div id="modal-student-chips"
+            class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto p-1.5 bg-slate-50/80 rounded-xl border border-slate-100">
+            <!-- 학생 칩 버튼 목록 -->
+          </div>
+          <input type="hidden" id="modal-selected-student-id" required="">
+        </div>
+
+        <!-- 2. 근태 유형 및 구분 -->
+        <div>
+          <label class="font-bold text-slate-800 block mb-1.5">2. 근태 구분 &amp; 사유 범주</label>
+          <div class="grid grid-cols-4 gap-1.5 mb-2" id="type-selector-group">
+            <button type="button" data-val="결석"
+              class="btn-type-opt py-2 rounded-xl font-bold bg-slate-900 text-white shadow-sm">결석</button>
+            <button type="button" data-val="지각"
+              class="btn-type-opt py-2 rounded-xl font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">지각</button>
+            <button type="button" data-val="조퇴"
+              class="btn-type-opt py-2 rounded-xl font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">조퇴</button>
+            <button type="button" data-val="결과"
+              class="btn-type-opt py-2 rounded-xl font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">결과</button>
+          </div>
+
+          <div class="grid grid-cols-4 gap-1.5" id="category-selector-group">
+            <button type="button" data-val="질병"
+              class="btn-cat-opt py-1.5 rounded-lg font-bold bg-indigo-100 text-indigo-800 border border-indigo-300">질병</button>
+            <button type="button" data-val="인정"
+              class="btn-cat-opt py-1.5 rounded-lg font-semibold bg-slate-50 text-slate-500 border border-slate-200">인정</button>
+            <button type="button" data-val="미인정"
+              class="btn-cat-opt py-1.5 rounded-lg font-semibold bg-slate-50 text-slate-500 border border-slate-200">미인정</button>
+            <button type="button" data-val="기타"
+              class="btn-cat-opt py-1.5 rounded-lg font-semibold bg-slate-50 text-slate-500 border border-slate-200">기타</button>
+          </div>
+        </div>
+
+        <!-- 지각 시 등교 교시 선택 (조건부 노출) -->
+        <div id="modal-late-period-box" class="bg-amber-50/60 p-3 rounded-2xl border border-amber-200/60 hidden">
+          <label class="font-bold text-amber-900 block mb-1.5">등교 교시 (지각)</label>
+          <div class="flex gap-1.5 flex-wrap" id="modal-period-chips">
+            <button type="button" data-period="1"
+              class="btn-period-chip flex-1 py-1.5 rounded-lg font-bold bg-white text-amber-900 border border-amber-200">1교시</button>
+            <button type="button" data-period="2"
+              class="btn-period-chip flex-1 py-1.5 rounded-lg font-bold bg-white text-amber-900 border border-amber-200">2교시</button>
+            <button type="button" data-period="3"
+              class="btn-period-chip flex-1 py-1.5 rounded-lg font-bold bg-white text-amber-900 border border-amber-200">3교시</button>
+            <button type="button" data-period="4"
+              class="btn-period-chip flex-1 py-1.5 rounded-lg font-bold bg-white text-amber-900 border border-amber-200">4교시</button>
+            <button type="button" data-period="5"
+              class="btn-period-chip flex-1 py-1.5 rounded-lg font-bold bg-white text-amber-900 border border-amber-200">5교시</button>
+            <button type="button" data-period="6"
+              class="btn-period-chip flex-1 py-1.5 rounded-lg font-bold bg-white text-amber-900 border border-amber-200">6교시</button>
+            <button type="button" data-period="7"
+              class="btn-period-chip flex-1 py-1.5 rounded-lg font-bold bg-white text-amber-900 border border-amber-200">7교시</button>
+          </div>
+        </div>
+
+        <!-- 3. 사유 입력 및 퀵 프리셋 -->
+        <div>
+          <label class="font-bold text-slate-800 block mb-1.5">3. 사유 입력</label>
+          <div class="flex flex-wrap gap-1 mb-2" id="modal-quick-reasons">
+            <!-- 퀵 사유 프리셋 칩들 -->
+          </div>
+          <input type="text" id="modal-reason-input" maxlength="300" placeholder="상세 사유 (비우면 '확인중'으로 저장)"
+            class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
+        </div>
+
+        <!-- 4. 학부모 연락 기록 -->
+        <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-800">학부모 연락 완료</span>
+            <input type="checkbox" id="modal-contacted-checkbox" class="w-4 h-4 text-indigo-600 rounded cursor-pointer">
+          </div>
+
+          <div id="modal-contact-details" class="space-y-2 pt-2 border-t border-slate-200 hidden">
+            <div class="flex gap-2">
+              <button type="button" id="btn-method-call"
+                class="flex-1 py-1 rounded-lg font-semibold bg-indigo-600 text-white">통화</button>
+              <button type="button" id="btn-method-sms"
+                class="flex-1 py-1 rounded-lg font-semibold bg-white text-slate-600 border border-slate-200">문자</button>
+            </div>
+            <div class="flex flex-wrap gap-1" id="modal-quick-memos">
+              <!-- 빠른 통화 메모 프리셋 -->
+            </div>
+            <input type="text" id="modal-memo-input" maxlength="300" placeholder="통화 또는 문자 내용 메모"
+              class="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-xs">
+          </div>
+        </div>
+
+        <!-- 제출 버튼 -->
+        <div class="pt-2">
+          <button type="submit"
+            class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white rounded-2xl font-bold text-sm shadow-md shadow-indigo-200 transition-all">
+            출결 등록 완료
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 📞 학부모 연락 상태 및 메모 빠른 수정 모달 -->
+  <div id="modal-contact-edit"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 hidden">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-6 space-y-4 anim-fade-in border border-slate-100">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+        <div>
+          <h3 class="text-base font-bold text-slate-900">학부모 연락 상태 및 메모 수정</h3>
+          <p id="contact-edit-student-label" class="text-xs text-indigo-600 font-semibold mt-0.5">대상 학생: -</p>
+        </div>
+        <button type="button" id="btn-close-contact-edit" class="p-1 text-slate-400 hover:text-slate-600 rounded-lg">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <form id="form-contact-edit" class="space-y-4 text-xs">
+        <input type="hidden" id="contact-edit-rec-id">
+
+        <div>
+          <label class="block text-slate-700 font-bold mb-1.5">1. 연락 상태 선택</label>
+          <div class="grid grid-cols-3 gap-2" id="contact-edit-status-group">
+            <button type="button" data-status="통화"
+              class="btn-c-status py-2 rounded-xl font-bold border border-slate-200 bg-slate-50 text-slate-700">📞 통화
+              완료</button>
+            <button type="button" data-status="문자"
+              class="btn-c-status py-2 rounded-xl font-bold border border-slate-200 bg-slate-50 text-slate-700">💬 문자
+              확인</button>
+            <button type="button" data-status="미확인"
+              class="btn-c-status py-2 rounded-xl font-bold border border-slate-200 bg-slate-50 text-slate-700">❗
+              미확인</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-slate-700 font-bold mb-1.5">2. 통화/문자 메모 (프리셋 클릭 또는 직접 입력)</label>
+          <div class="flex flex-wrap gap-1 mb-2" id="contact-edit-quick-memos">
+            <!-- JS로 프리셋 버튼 렌더링 -->
+          </div>
+          <input type="text" id="contact-edit-memo-input" placeholder="학부모 연락 관련 상세 메모를 입력하세요"
+            class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-600">
+        </div>
+
+        <div class="flex gap-2 pt-1">
+          <button type="button" id="btn-cancel-contact-edit"
+            class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold transition-all">
+            취소
+          </button>
+          <button type="submit"
+            class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold transition-all shadow-md shadow-indigo-100">
+            저장하기
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 🔒 교사 전용 보안 PIN 인증 모달 -->
+  <div id="modal-pin-auth"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 hidden">
+    <div
+      class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-6 text-center space-y-4 anim-fade-in border border-slate-100">
+      <div
+        class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-2xl mx-auto flex items-center justify-center shadow-sm">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+      </div>
+      <div>
+        <h3 class="text-base font-bold text-slate-900">담임교사 보안 인증</h3>
+        <p class="text-xs text-slate-500 mt-1">학생 개인정보 보호를 위해 교사 전용 PIN 번호를 입력해 주세요.</p>
+      </div>
+
+      <form id="form-pin-verify" class="space-y-4">
+        <div>
+          <input type="password" id="input-pin-code" inputmode="numeric" maxlength="4" placeholder="PIN 4자리 입력"
+            autocomplete="off"
+            class="w-40 text-center tracking-[0.5em] text-2xl font-black py-2.5 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-600 focus:bg-white transition-all text-slate-800"
+            required="">
+          <p id="pin-error-msg" class="text-xs font-bold text-rose-600 mt-1.5 hidden">비밀번호가 일치하지 않습니다.</p>
+        </div>
+
+        <div class="flex gap-2 pt-1">
+          <button type="button" id="btn-cancel-pin"
+            class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all">
+            취소 (학생 폼 유지)
+          </button>
+          <button type="submit"
+            class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-100">
+            인증 및 데스크 열기
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ⚙️ 교사 PIN 비밀번호 변경 모달 -->
+  <div id="modal-pin-change"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 hidden">
+    <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-6 space-y-4 anim-fade-in border border-slate-100">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+        <h3 id="pin-change-title" class="text-base font-bold text-slate-900">교사 보안 PIN 변경</h3>
+        <button id="btn-close-pin-change" class="p-1 text-slate-400 hover:text-slate-600">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <form id="form-change-pin-submit" class="space-y-3 text-xs">
+        <p id="pin-setup-hint" class="x-hint hidden">처음 사용하시는군요. 이 기기에서 쓸 PIN 4자리를 정해 주세요.</p>
+        <div id="current-pin-box">
+          <label class="block text-slate-600 font-semibold mb-1">현재 PIN 번호</label>
+          <input type="password" id="input-current-pin" inputmode="numeric" maxlength="4" placeholder="현재 4자리 입력"
+            class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold focus:outline-none focus:border-indigo-600"
+            required="">
+        </div>
+        <div>
+          <label class="block text-slate-600 font-semibold mb-1">새로운 PIN 번호</label>
+          <input type="password" id="input-new-pin" inputmode="numeric" maxlength="4" placeholder="숫자 4자리"
+            class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold focus:outline-none focus:border-indigo-600"
+            required="">
+        </div>
+        <div>
+          <label class="block text-slate-600 font-semibold mb-1">새로운 PIN 확인</label>
+          <input type="password" id="input-new-pin-confirm" inputmode="numeric" maxlength="4" placeholder="숫자 4자리 재입력"
+            class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold focus:outline-none focus:border-indigo-600"
+            required="">
+        </div>
+
+        <button type="submit"
+          class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs shadow-md shadow-indigo-100 transition-all mt-2">
+          PIN 번호 변경 저장
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ⚙️ 설정 모달: 명단 · 신고함 연결 · 백업/복원 · PIN -->
+  <div id="modal-settings"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 hidden">
+    <div class="x-panel anim-fade-in">
+      <div class="x-panel-head">
+        <h3>설정</h3>
+        <button type="button" id="btn-close-settings" class="x-icon-btn" aria-label="닫기">✕</button>
+      </div>
+      <div class="x-panel-body">
+        <section class="x-section">
+          <h4>1. 학생 명단 <span id="roster-count" class="x-badge">0명</span></h4>
+          <p class="x-hint">한 줄에 한 명씩 붙여넣으세요. 예: <code>1 홍길동</code>, <code>20301 홍길동 남</code> (NEIS·엑셀에서 복사해도 됩니다).
+            명단은 <b>이 기기 브라우저에만</b> 저장되고 인터넷에 올라가지 않습니다.</p>
+          <textarea id="roster-input" rows="7" class="x-input x-mono"
+            placeholder="1 홍길동&#10;2 김철수&#10;3 이영희"></textarea>
+          <div class="x-row"><button type="button" id="btn-save-roster" class="x-btn x-btn-primary">명단 저장</button></div>
+        </section>
+
+        <section class="x-section">
+          <h4>2. 학생 신고함 연결 <span id="api-state" class="x-badge">미연결</span></h4>
+          <p class="x-hint">설정 가이드 3단계에서 받은 <b>교사 키</b>를 입력하세요. 교사 키는 이 기기에만 저장됩니다.</p>
+          <div class="x-row">
+            <input type="password" id="teacher-key-input" class="x-input" autocomplete="off" placeholder="교사 키">
+            <button type="button" id="btn-test-api" class="x-btn x-btn-primary">저장 · 연결 테스트</button>
+          </div>
+          <div class="x-row">
+            <button type="button" id="btn-copy-student-link" class="x-btn">📋 학생용 링크 복사</button>
+            <button type="button" id="btn-purge-server" class="x-btn x-btn-danger">받아온 신고를 서버에서 삭제</button>
+          </div>
+          <p class="x-hint">서버에 남은 신고는 확인 여부와 상관없이 <span data-cfg="retentionDays">7</span>일이 지나면 자동 삭제됩니다.
+            태블릿·PC를 함께 쓰신다면 두 기기 모두에서 받아온 뒤 삭제하세요.</p>
+        </section>
+
+        <section class="x-section">
+          <h4>3. 데이터 백업 · 복원</h4>
+          <p class="x-hint">출결 기록은 이 기기의 브라우저에만 저장됩니다. PC 복원 프로그램·브라우저 정리에 대비해 <b>주 1회 백업</b>하세요.
+            복원하면 기존 기록과 <b>병합</b>됩니다(지우지 않음). 다른 기기로 옮길 때도 이 기능을 쓰세요.</p>
+          <div class="x-row">
+            <button type="button" id="btn-backup-json" class="x-btn x-btn-primary">💾 JSON 백업 받기</button>
+            <label class="x-btn">📂 백업 파일로 복원<input type="file" id="input-restore-json" accept=".json,application/json"
+                hidden></label>
+          </div>
+          <p id="last-backup-text" class="x-hint"></p>
+        </section>
+
+        <section class="x-section">
+          <h4>4. 보안</h4>
+          <div class="x-row"><button type="button" id="btn-open-pin-setting" class="x-btn">🔑 PIN 변경</button></div>
+          <p class="x-hint">PIN은 교실에서 화면을 가리는 잠금입니다. 학생이 개발자 도구를 다룰 수 있는 기기에는 교사 데이터를 두지 마세요.</p>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"
+    class="fixed bottom-6 left-1/2 -translate-y-0 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 scale-95">
+    <div class="bg-slate-900 text-white px-4 py-2.5 rounded-2xl shadow-xl text-xs font-bold flex items-center gap-2">
+      <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span id="toast-text">알림 메시지</span>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      'use strict';
+
+      /* =========================================================
+       *  ① 배포 전에 여기만 수정하세요
+       * ========================================================= */
+      const CONFIG = {
+        API_URL: 'https://script.google.com/macros/s/AKfycbyWFJETcKJIXwQUYmhAkgK0TlyDFoJLcBTVKjq71kjYalzps1K8LogSEW95rZL134cn/exec',                  // Apps Script 웹 앱 주소 (https://script.google.com/macros/s/…/exec)
+        CLASS_LABEL: '2학년 3반',
+        TEACHER_NAME: '허보현',
+        MAX_STUDENT_NUMBER: 34,       // 학생 신고 폼 번호 목록의 마지막 번호
+        REQUIRE_STUDENT_CODE: false,  // Code.gs 의 REQUIRE_STUDENT_CODE 와 같게 맞추세요
+        RETENTION_DAYS: 7,            // Code.gs 의 RETENTION_DAYS 와 같게 맞추세요 (안내 문구용)
+        AUTO_SYNC_SECONDS: 120,       // 교사 화면이 열려 있을 때 신고함 자동 확인 간격
+        IDLE_LOCK_MINUTES: 10,        // 이 시간 동안 입력이 없으면 교사 화면 자동 잠금
+      };
+
+      /* ---------- 공통 유틸 ---------- */
+      const $ = (id) => document.getElementById(id);
+      const ESC_MAP = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '`': '&#96;' };
+      const esc = (v) => String(v ?? '').replace(/[&<>"'`]/g, (c) => ESC_MAP[c]);
+      const pad2 = (n) => String(n).padStart(2, '0');
+      const toDateStr = (d) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+      const getTodayDateString = () => toDateStr(new Date());
+      const nowHHMM = () => { const n = new Date(); return `${pad2(n.getHours())}:${pad2(n.getMinutes())}`; };
+      const studentIdOf = (number) => 'std-' + pad2(number);
+      const numberOfStudentId = (sid) => { const m = /^std-(\d{2})$/.exec(sid || ''); return m ? Number(m[1]) : null; };
+      const DAYS = ['일', '월', '화', '수', '목', '금', '토'];
+
+      function addDays(dateStr, n) {
+        const [y, m, d] = dateStr.split('-').map(Number);
+        return toDateStr(new Date(y, m - 1, d + n));
+      }
+      function newId(prefix) {
+        const rnd = (window.crypto && crypto.randomUUID)
+          ? crypto.randomUUID()
+          : Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+        return `${prefix}-${rnd}`;
+      }
+
+      /* ---------- 저장소 ---------- */
+      const KEYS = {
+        records: 'school_attendance_records_store_v4', // 기존 파일과 같은 키 (같은 브라우저면 기존 기록을 그대로 읽음)
+        roster: 'school_attendance_roster_v1',
+        pin: 'school_attendance_pin_v1',
+        pinFail: 'school_attendance_pin_fail',
+        auth: 'school_attendance_auth',
+        teacherKey: 'school_attendance_teacher_key',
+        seenReports: 'school_attendance_seen_reports',
+        lastBackup: 'school_attendance_last_backup',
+      };
+      function lsGet(key, fallback = null) {
+        try { const v = localStorage.getItem(key); return v === null ? fallback : v; } catch (_) { return fallback; }
+      }
+      function lsSet(key, val) { try { localStorage.setItem(key, val); return true; } catch (_) { return false; } }
+      function lsDel(key) { try { localStorage.removeItem(key); } catch (_) { /* 무시 */ } }
+      function lsJSON(key, fallback) {
+        try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch (_) { return fallback; }
+      }
+
+      /* ---------- 값 검증 ---------- */
+      const TYPES = ['결석', '지각', '조퇴', '결과'];
+      const CATS = ['질병', '인정', '미인정', '기타'];
+      const DOCS = ['미제출', '제출완료', '해당없음'];
+      const pick = (v, allowed, def) => (allowed.includes(v) ? v : def);
+      const needsDocument = (category) => category === '질병' || category === '인정';
+
+      const QUICK_REASONS = ['감기', '복통', '두통', '어지럼증', '몸살', '병원 진료', '가족 경조사', '체험학습', '단순 늦잠'];
+      const QUICK_MEMOS = ['학부모 통화 완료 (사유 확인 및 제출 서류 안내)', '학부모 문자 접수 확인 완료', '병원 진료 후 등교 통보 (영수증 지참 예정)', '연락 두절로 지속 통화 시도 중'];
+
+      function sanitizeStudent(s) {
+        const number = Number(s && s.number);
+        if (!Number.isInteger(number) || number < 1 || number > 99) return null;
+        return {
+          id: studentIdOf(number),
+          number,
+          studentNumber: String(s.studentNumber || '').replace(/\D/g, '').slice(0, 10),
+          name: String(s.name || '').trim().slice(0, 20),
+          gender: ['남', '여'].includes(s.gender) ? s.gender : '',
+        };
+      }
+
+      function sanitizeRecord(rec) {
+        const pc = (rec && rec.parentContact) || {};
+        const period = Number(rec.checkInPeriod);
+        const contacted = Boolean(pc.contacted);
+        return {
+          id: typeof rec.id === 'string' && /^[\w-]{1,80}$/.test(rec.id) ? rec.id : newId('rec'),
+          studentId: /^std-\d{2}$/.test(rec.studentId || '') ? rec.studentId : '',
+          date: /^\d{4}-\d{2}-\d{2}$/.test(rec.date || '') ? rec.date : getTodayDateString(),
+          type: pick(rec.type, TYPES, '결석'),
+          category: pick(rec.category, CATS, '기타'),
+          reason: String(rec.reason ?? '').slice(0, 300),
+          checkInPeriod: Number.isInteger(period) && period >= 1 && period <= 7 ? period : null,
+          documentStatus: pick(rec.documentStatus, DOCS, '해당없음'),
+          parentContact: {
+            contacted,
+            method: contacted ? pick(pc.method, ['통화', '문자'], '통화') : null,
+            memo: String(pc.memo ?? '').slice(0, 300),
+            contactedAt: contacted && /^\d{2}:\d{2}$/.test(pc.contactedAt || '') ? pc.contactedAt : null,
+          },
+          neisSynced: Boolean(rec.neisSynced),
+          source: rec.source === 'student' ? 'student' : 'teacher',
+          submittedAt: String(rec.submittedAt || '').slice(0, 20),
+        };
+      }
+
+      /* ---------- 기록 로드 / 저장 (유실 방지) ---------- */
+      let saveBlocked = false; // 깨진 원본을 따로 보존하지 못했으면 덮어쓰기 금지
+
+      function loadRecords() {
+        let raw;
+        try { raw = localStorage.getItem(KEYS.records); } catch (_) {
+          saveBlocked = true;
+          setTimeout(() => alert('이 브라우저에서는 저장소를 쓸 수 없습니다. (사생활 보호 모드 등)'), 0);
+          return [];
+        }
+        if (raw === null) return []; // 첫 실행: 빈 상태로 시작
+        try {
+          const parsed = JSON.parse(raw);
+          const list = Array.isArray(parsed) ? parsed : parsed && parsed.records;
+          if (!Array.isArray(list)) throw new Error('records 배열 아님');
+          return list.filter((r) => r && typeof r === 'object').map(sanitizeRecord);
+        } catch (err) {
+          saveBlocked = !lsSet(`${KEYS.records}_broken_${Date.now()}`, raw);
+          setTimeout(() => alert('저장된 출결 데이터를 읽지 못했습니다.\n원본은 별도로 보관했습니다. [설정 → 백업 파일로 복원]으로 복구해 주세요.'), 0);
+          return [];
+        }
+      }
+
+      function persistRecords() {
+        if (saveBlocked) { showToast('⚠️ 저장 잠금 상태입니다. 백업 파일로 복원한 뒤 사용하세요.'); return false; }
+        try {
+          localStorage.setItem(KEYS.records, JSON.stringify(appState.records));
+          return true;
+        } catch (e) {
+          showToast(e.name === 'QuotaExceededError'
+            ? '⚠️ 저장 공간 부족! 설정에서 JSON 백업을 받아 두세요.'
+            : '⚠️ 저장 실패: ' + e.message);
+          return false;
+        }
+      }
+
+      function loadRoster() {
+        const list = lsJSON(KEYS.roster, []);
+        if (!Array.isArray(list)) return [];
+        return list.map(sanitizeStudent).filter(Boolean).sort((a, b) => a.number - b.number);
+      }
+
+      // "1 홍길동", "20301 홍길동 남", "1번,홍길동" 등 붙여넣은 명단을 해석
+      function parseRosterText(text) {
+        const out = new Map();
+        text.split(/\r?\n/).forEach((line) => {
+          const tokens = line.split(/[\t,;\s]+/).map((t) => t.trim()).filter(Boolean);
+          let number = null; let studentNumber = ''; let name = ''; let gender = '';
+          tokens.forEach((t) => {
+            const clean = t.replace(/번$/, '');
+            if (/^\d{5,}$/.test(clean)) studentNumber = clean;
+            else if (/^\d{1,2}$/.test(clean) && number === null) number = Number(clean);
+            else if (t === '남' || t === '여') gender = t;
+            else if (!name && /[가-힣A-Za-z]/.test(t)) name = t;
+          });
+          if (number === null && studentNumber) number = Number(studentNumber.slice(-2));
+          const st = sanitizeStudent({ number, studentNumber, name, gender });
+          if (st && st.name) out.set(st.number, st);
+        });
+        return [...out.values()].sort((a, b) => a.number - b.number);
+      }
+      const rosterToText = (list) => list.map((s) => [s.number, s.name, s.studentNumber, s.gender].filter(Boolean).join(' ')).join('\n');
+
+      /* ---------- 상태 ---------- */
+      function readSessionAuth() { try { return sessionStorage.getItem(KEYS.auth) === '1'; } catch (_) { return false; } }
+      const defaultModalState = () => ({ studentId: '', type: '결석', category: '질병', checkInPeriod: null, contactMethod: '통화' });
+
+      const appState = {
+        students: loadRoster(),
+        records: loadRecords(),
+        selectedDate: getTodayDateString(),
+        activeFilter: '전체',
+        searchQuery: '',
+        currentView: 'teacher',
+        isTeacherAuthenticated: readSessionAuth(), // 기본은 잠김. 같은 탭 새로고침(F5)에서만 유지
+        isStudentLinkMode: false,
+        modal: defaultModalState(),
+        contactEdit: { recordId: '', status: '통화' },
+        portal: { type: '결석' },
+        sync: { busy: false, lastAt: '', error: '' },
+      };
+
+      /* ---------- 토스트 ---------- */
+      let toastTimeout = null;
+      function showToast(message) {
+        const container = $('toast-container');
+        const text = $('toast-text');
+        if (!container || !text) return;
+        text.textContent = message;
+        container.classList.remove('opacity-0', 'scale-95');
+        container.classList.add('opacity-100', 'scale-100');
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+          container.classList.remove('opacity-100', 'scale-100');
+          container.classList.add('opacity-0', 'scale-95');
+        }, 2800);
+      }
+
+      /* ---------- 표시용 도우미 ---------- */
+      function formatKoreanDate(dateStr) {
+        const [y, m, d] = dateStr.split('-').map(Number);
+        const day = DAYS[new Date(y, m - 1, d).getDay()];
+        return `${y}.${pad2(m)}.${pad2(d)}(${day})${dateStr === getTodayDateString() ? ' · 오늘' : ''}`;
+      }
+      function formatShortDate(dateStr) {
+        const [y, m, d] = dateStr.split('-').map(Number);
+        return `${m}/${d}(${DAYS[new Date(y, m - 1, d).getDay()]})`;
+      }
+      function studentInfo(rec) {
+        const st = appState.students.find((s) => s.id === rec.studentId);
+        const number = st ? st.number : numberOfStudentId(rec.studentId);
+        return {
+          number,
+          name: st ? st.name : (number ? '명단 없음' : '미등록'),
+          studentNumber: st ? st.studentNumber : '',
+          gender: st ? st.gender : '',
+        };
+      }
+      const typeStyleOf = (type) => (type === '결석' ? 'bg-rose-100 text-rose-800'
+        : type === '지각' ? 'bg-amber-100 text-amber-800'
+          : type === '조퇴' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800');
+      const sourceBadge = (rec) => (rec.source === 'student' ? '<span class="x-src-badge">학생신고</span>' : '');
+
+      /* ---------- 집계 / 필터 ---------- */
+      const isPending = (r) => r.documentStatus === '미제출' || !r.parentContact.contacted || !r.neisSynced
+        || (r.type === '지각' && !r.checkInPeriod);
+
+      function getComputedData() {
+        const dateRecords = appState.records.filter((r) => r.date === appState.selectedDate);
+        const total = appState.students.length;
+        const allPending = appState.records.filter(isPending);
+        const counts = {
+          total,
+          absent: dateRecords.filter((r) => r.type === '결석').length,
+          late: dateRecords.filter((r) => r.type === '지각').length,
+          lateNoPeriod: dateRecords.filter((r) => r.type === '지각' && !r.checkInPeriod).length,
+          early: dateRecords.filter((r) => r.type === '조퇴').length,
+          missed: dateRecords.filter((r) => r.type === '결과').length,
+          present: Math.max(0, total - new Set(dateRecords.map((r) => r.studentId)).size),
+          docPending: dateRecords.filter((r) => r.documentStatus === '미제출').length,
+          contactPending: dateRecords.filter((r) => !r.parentContact.contacted).length,
+          neisPending: dateRecords.filter((r) => !r.neisSynced).length,
+          allPending: allPending.length,
+        };
+
+        const crossDate = appState.activeFilter === '기간미결';
+        const query = appState.searchQuery.trim().toLowerCase();
+        const filtered = (crossDate ? allPending : dateRecords).filter((rec) => {
+          if (query) {
+            const info = studentInfo(rec);
+            const hit = info.name.toLowerCase().includes(query)
+              || String(info.number) === query
+              || (rec.reason || '').toLowerCase().includes(query);
+            if (!hit) return false;
+          }
+          switch (appState.activeFilter) {
+            case '서류미제출': return rec.documentStatus === '미제출';
+            case '부모님미확인': return !rec.parentContact.contacted;
+            case '등교미기록': return rec.type === '지각' && !rec.checkInPeriod;
+            case '나이스미입력': return !rec.neisSynced;
+            default: return true;
+          }
+        });
+
+        // 나이스 입력 순서와 같도록 번호순 정렬 (기간 미결은 최근 날짜 먼저)
+        const num = (r) => numberOfStudentId(r.studentId) ?? 999;
+        filtered.sort((a, b) => (crossDate && a.date !== b.date ? b.date.localeCompare(a.date) : 0)
+          || num(a) - num(b) || TYPES.indexOf(a.type) - TYPES.indexOf(b.type));
+
+        return { dateRecords, filtered, counts, crossDate };
+      }
+
+      /* ---------- 렌더링 ---------- */
+      function renderKPIs(counts) {
+        const box = $('kpi-grid');
+        if (!box) return;
+        const pct = counts.total ? Math.round((counts.present / counts.total) * 100) : 0;
+        box.innerHTML = `
+        <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm">
+          <div class="text-xs font-semibold text-slate-500 mb-1">재적 총원</div>
+          <div class="flex items-baseline justify-between">
+            <span class="text-2xl font-black text-slate-900">${counts.total ? counts.total + '명' : '-'}</span>
+            <span class="text-xs text-slate-400">${counts.total ? esc(CONFIG.CLASS_LABEL) : '명단 미등록'}</span>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl p-4 border border-emerald-100 shadow-sm bg-emerald-50/20">
+          <div class="text-xs font-semibold text-emerald-700 mb-1">정상 출석</div>
+          <div class="flex items-baseline justify-between">
+            <span class="text-2xl font-black text-emerald-700">${counts.total ? counts.present + '명' : '-'}</span>
+            <span class="text-xs font-bold text-emerald-600">${counts.total ? pct + '%' : ''}</span>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl p-4 border border-rose-100 shadow-sm bg-rose-50/20">
+          <div class="text-xs font-semibold text-rose-700 mb-1">결석</div>
+          <div class="flex items-baseline justify-between">
+            <span class="text-2xl font-black text-rose-700">${counts.absent}건</span>
+            <span class="text-xs text-rose-600 font-medium">${counts.absent > 0 ? '집중관리' : '완료'}</span>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl p-4 border border-amber-100 shadow-sm bg-amber-50/20">
+          <div class="text-xs font-semibold text-amber-700 mb-1">지각</div>
+          <div class="flex items-baseline justify-between">
+            <span class="text-2xl font-black text-amber-700">${counts.late}건</span>
+            ${counts.lateNoPeriod > 0
+            ? `<span class="text-xs font-bold text-rose-600 animate-pulse">등교미기록 ${counts.lateNoPeriod}</span>`
+            : '<span class="text-xs text-slate-400">기록완료</span>'}
+          </div>
+        </div>
+        <div class="col-span-2 sm:col-span-1 bg-white rounded-2xl p-4 border border-purple-100 shadow-sm bg-purple-50/20">
+          <div class="text-xs font-semibold text-purple-700 mb-1">조퇴 · 결과</div>
+          <div class="flex items-baseline justify-between">
+            <span class="text-2xl font-black text-purple-700">${counts.early + counts.missed}건</span>
+            <span class="text-xs text-purple-600">조퇴 ${counts.early} / 결과 ${counts.missed}</span>
+          </div>
+        </div>`;
+      }
+
+      function renderFilterTabs(counts, totalForDate) {
+        const box = $('filter-tabs');
+        if (!box) return;
+        const tabs = [
+          { id: '전체', label: '전체 보기', count: totalForDate, danger: false },
+          { id: '서류미제출', label: '서류 미제출', count: counts.docPending, danger: counts.docPending > 0 },
+          { id: '부모님미확인', label: '부모님 미확인', count: counts.contactPending, danger: counts.contactPending > 0 },
+          { id: '등교미기록', label: '등교교시 미기록', count: counts.lateNoPeriod, danger: counts.lateNoPeriod > 0 },
+          { id: '나이스미입력', label: '나이스 미입력', count: counts.neisPending, danger: counts.neisPending > 0 },
+          { id: '기간미결', label: '📌 기간 전체 미결', count: counts.allPending, danger: counts.allPending > 0 },
+        ];
+        box.innerHTML = tabs.map((t) => {
+          const active = appState.activeFilter === t.id;
+          const btnClass = active ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200/70';
+          const badgeClass = active ? 'bg-white/20 text-white' : t.danger ? 'bg-rose-100 text-rose-700' : 'bg-slate-200 text-slate-700';
+          return `
+          <button type="button" data-filter="${t.id}"
+            class="tab-btn px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${btnClass}">
+            <span>${t.label}</span>
+            <span class="px-1.5 py-0.5 rounded-full text-[10px] font-extrabold ${badgeClass}">${t.count}</span>
+          </button>`;
+        }).join('');
+      }
+
+      function periodSelect(rec, extraClass) {
+        return `
+        <select data-action="change-period" data-id="${esc(rec.id)}" class="${extraClass} ${!rec.checkInPeriod
+            ? 'border-rose-300 bg-rose-50 text-rose-700 animate-pulse' : 'border-slate-200 bg-white text-slate-800'}">
+          <option value="">등교 미기록</option>
+          ${[1, 2, 3, 4, 5, 6, 7].map((p) => `<option value="${p}" ${rec.checkInPeriod === p ? 'selected' : ''}>${p}교시 등교</option>`).join('')}
+        </select>`;
+      }
+
+      function renderDesktopTable(records, crossDate) {
+        const tbody = $('desktop-table-body');
+        if (!tbody) return;
+        if (!records.length) {
+          tbody.innerHTML = `
+          <tr><td colspan="10" class="py-12 text-center text-slate-400">
+            ${crossDate ? '처리하지 않은 미결 기록이 없습니다. 👍' : `선택하신 날짜(${esc(appState.selectedDate)})에 해당하는 출결 기록이 없습니다.`}
+          </td></tr>`;
+          return;
+        }
+        tbody.innerHTML = records.map((rec) => {
+          const info = studentInfo(rec);
+          const isNeis = rec.neisSynced;
+          const pc = rec.parentContact;
+          const docStyle = rec.documentStatus === '미제출' ? 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100'
+            : rec.documentStatus === '제출완료' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+              : 'bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200';
+          const id = esc(rec.id);
+          return `
+          <tr class="hover:bg-slate-50/70 transition-colors ${isNeis ? 'bg-slate-50/40 text-slate-500' : ''}">
+            <td class="py-3 px-4 text-center font-bold text-slate-700">${info.number ? info.number + '번' : '-'}</td>
+            <td class="py-3 px-3">
+              <div class="font-bold text-slate-900">${esc(info.name)}${sourceBadge(rec)}</div>
+              <div class="text-[10px] text-slate-400">${esc(info.studentNumber)}</div>
+            </td>
+            <td class="py-3 px-3 text-center">
+              <span class="inline-block px-2 py-0.5 rounded-md font-bold text-[11px] ${typeStyleOf(rec.type)}">${esc(rec.type)}</span>
+            </td>
+            <td class="py-3 px-3 text-center">
+              <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700">${esc(rec.category)}</span>
+            </td>
+            <td class="py-3 px-4">
+              ${crossDate ? `<span class="x-date-chip">${formatShortDate(rec.date)}</span>` : ''}
+              <div class="${isNeis ? 'line-through text-slate-400' : 'text-slate-800 font-medium'}">${esc(rec.reason || '-')}</div>
+            </td>
+            <td class="py-3 px-3 text-center">
+              ${rec.type === '지각' ? periodSelect(rec, 'px-2 py-1 rounded-lg text-xs font-bold border') : '<span class="text-slate-300">-</span>'}
+            </td>
+            <td class="py-3 px-3 text-center">
+              <button type="button" data-action="toggle-doc" data-id="${id}"
+                class="px-2.5 py-1 rounded-lg font-bold text-[11px] border transition-all flex items-center justify-center gap-1 mx-auto ${docStyle}"
+                title="클릭하여 미제출 → 제출완료 → 해당없음 순으로 변경">
+                ${rec.documentStatus === '미제출' ? '<span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping"></span>' : ''}
+                <span>${esc(rec.documentStatus)}</span>
+              </button>
+            </td>
+            <td class="py-3 px-3">
+              <div class="flex items-center gap-1.5">
+                <button type="button" data-action="toggle-contact" data-id="${id}"
+                  title="클릭 시 [통화 → 문자 → 미확인] 순으로 상태가 바뀝니다."
+                  class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-bold text-[11px] border transition-all active:scale-95 ${pc.contacted
+              ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+              : 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100'}">
+                  <span>${pc.contacted ? esc(pc.method || '통화') : '미확인'}</span>
+                </button>
+                ${pc.contacted && pc.contactedAt ? `<span class="text-[10px] text-slate-400">${esc(pc.contactedAt)}</span>` : ''}
+              </div>
+              <button type="button" data-action="edit-contact-memo" data-id="${id}"
+                class="text-left block w-full text-[10px] text-slate-500 hover:text-indigo-600 truncate max-w-[165px] mt-0.5 transition-colors"
+                title="${esc(pc.memo || '클릭하여 메모 입력')}">
+                ${pc.memo ? esc(pc.memo) : '+ 통화/문자 메모 입력'}
+              </button>
+            </td>
+            <td class="py-3 px-3 text-center">
+              <button type="button" data-action="toggle-neis" data-id="${id}"
+                class="px-2.5 py-1 rounded-lg text-xs font-bold border transition-all ${isNeis
+              ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-slate-600 border-slate-300 hover:border-indigo-500'}">
+                ${isNeis ? '완료 ✓' : '미입력'}
+              </button>
+            </td>
+            <td class="py-3 px-3 text-center">
+              <button type="button" data-action="delete-record" data-id="${id}"
+                class="text-slate-300 hover:text-rose-600 transition-colors p-1" title="출결 기록 삭제">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </td>
+          </tr>`;
+        }).join('');
+      }
+
+      function renderMobileList(records, crossDate) {
+        const box = $('mobile-card-list');
+        if (!box) return;
+        if (!records.length) {
+          box.innerHTML = `
+          <div class="bg-white rounded-2xl p-8 text-center text-slate-400 border border-slate-200">
+            ${crossDate ? '처리하지 않은 미결 기록이 없습니다. 👍' : `선택하신 날짜(${esc(appState.selectedDate)})의 출결 기록이 없습니다.`}
+          </div>`;
+          return;
+        }
+        box.innerHTML = records.map((rec) => {
+          const info = studentInfo(rec);
+          const isNeis = rec.neisSynced;
+          const pc = rec.parentContact;
+          const id = esc(rec.id);
+          return `
+          <div class="bg-white rounded-2xl p-4 border transition-all shadow-sm ${isNeis ? 'border-slate-200 bg-slate-50/50' : 'border-slate-200/90'}">
+            <div class="flex items-start justify-between mb-2">
+              <div>
+                ${crossDate ? `<span class="x-date-chip">${formatShortDate(rec.date)}</span>` : ''}
+                <div class="flex items-center gap-2">
+                  <span class="font-extrabold text-slate-900 text-base">${info.number ? info.number + '번 ' : ''}${esc(info.name)}</span>
+                  <span class="px-2 py-0.5 rounded-md font-bold text-xs ${typeStyleOf(rec.type)}">${esc(rec.type)}</span>
+                  <span class="px-1.5 py-0.5 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700">${esc(rec.category)}</span>
+                  ${sourceBadge(rec)}
+                </div>
+              </div>
+              <button type="button" data-action="delete-record" data-id="${id}" class="text-slate-300 hover:text-rose-600 p-1" title="삭제">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
+            <p class="text-xs mb-3 ${isNeis ? 'line-through text-slate-400' : 'text-slate-800'}">${esc(rec.reason || '사유 없음')}</p>
+            <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100">
+              ${rec.type === '지각' ? `<div class="col-span-2">${periodSelect(rec, 'w-full py-1.5 px-2 rounded-xl text-xs font-bold border')}</div>` : ''}
+              <button type="button" data-action="toggle-contact" data-id="${id}"
+                class="py-1.5 px-2 rounded-xl text-xs font-bold border text-center ${pc.contacted
+              ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-700 border-rose-200'}">
+                ${pc.contacted ? `연락: ${esc(pc.method || '통화')}` : '❗ 부모 미확인'}
+              </button>
+              <button type="button" data-action="toggle-doc" data-id="${id}"
+                class="py-1.5 px-2 rounded-xl text-xs font-bold border text-center ${rec.documentStatus === '미제출'
+              ? 'bg-rose-50 text-rose-700 border-rose-200'
+              : rec.documentStatus === '제출완료' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-50 text-slate-500 border-slate-200'}">
+                서류: ${esc(rec.documentStatus)}
+              </button>
+            </div>
+            <div class="mt-2 pt-2 flex items-center justify-between">
+              <button type="button" data-action="edit-contact-memo" data-id="${id}"
+                class="text-[11px] text-slate-500 hover:text-indigo-600 truncate max-w-[180px] text-left">
+                ✏️ ${esc(pc.memo || '연락 메모 입력')}
+              </button>
+              <button type="button" data-action="toggle-neis" data-id="${id}"
+                class="px-3 py-1 rounded-xl text-xs font-bold transition-all ${isNeis ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-700'}">
+                ${isNeis ? 'NEIS 완료 ✓' : 'NEIS 미입력'}
+              </button>
+            </div>
+          </div>`;
+        }).join('');
+      }
+
+      function renderSetupNotice() {
+        const box = $('setup-notice');
+        if (!box) return;
+        const items = [];
+        if (!appState.students.length) items.push('학생 명단이 없습니다. <button type="button" data-notice="settings">명단 등록</button>');
+        if (!CONFIG.API_URL) items.push('신고함 주소(API_URL)가 비어 있어 학생 신고를 받을 수 없습니다. (설정 가이드 4단계)');
+        else if (!lsGet(KEYS.teacherKey)) items.push('신고함 교사 키가 없습니다. <button type="button" data-notice="settings">연결하기</button>');
+        const last = lsGet(KEYS.lastBackup);
+        const daysSince = last ? Math.floor((new Date(getTodayDateString()) - new Date(last)) / 864e5) : null;
+        if (appState.records.length && (daysSince === null || daysSince >= 7)) {
+          items.push(`💾 ${last ? `마지막 백업 ${daysSince}일 전` : '아직 백업한 적이 없습니다'}. <button type="button" data-notice="backup">지금 백업</button>`);
+        }
+        box.innerHTML = items.map((t) => `<span>${t}</span>`).join('<span>·</span>');
+        box.classList.toggle('hidden', !items.length);
+      }
+
+      function renderSyncStatus() {
+        const el = $('sync-status');
+        const btn = $('btn-sync');
+        if (!el || !btn) return;
+        const configured = CONFIG.API_URL && lsGet(KEYS.teacherKey);
+        btn.disabled = appState.sync.busy;
+        btn.title = '학생들이 보낸 출결 신고를 지금 가져옵니다. (화면이 열려 있으면 자동으로 확인)';
+        el.classList.remove('is-error', 'is-ok');
+        if (!configured) el.textContent = '미연결';
+        else if (appState.sync.busy) el.textContent = '확인 중…';
+        else if (appState.sync.error) { el.textContent = '연결 오류'; el.classList.add('is-error'); btn.title = appState.sync.error; }
+        else if (appState.sync.lastAt) { el.textContent = `${appState.sync.lastAt} 확인`; el.classList.add('is-ok'); }
+        else el.textContent = '대기';
+      }
+
+      function clearTeacherDom() {
+        ['kpi-grid', 'filter-tabs', 'desktop-table-body', 'mobile-card-list', 'setup-notice'].forEach((id) => {
+          const el = $(id);
+          if (el) el.innerHTML = '';
+        });
+      }
+
+      function renderApp() {
+        // 인증 전에는 교사 데이터를 DOM에 아예 그리지 않음 (개발자 도구 요소 패널 노출 차단)
+        if (!appState.isTeacherAuthenticated) { clearTeacherDom(); return; }
+        const computed = getComputedData();
+        const label = $('label-selected-date');
+        const picker = $('input-date-picker');
+        if (label) label.textContent = formatKoreanDate(appState.selectedDate);
+        if (picker) picker.value = appState.selectedDate;
+        $('btn-today')?.classList.toggle('hidden', appState.selectedDate === getTodayDateString());
+        renderKPIs(computed.counts);
+        renderFilterTabs(computed.counts, computed.dateRecords.length);
+        renderDesktopTable(computed.filtered, computed.crossDate);
+        renderMobileList(computed.filtered, computed.crossDate);
+        renderSetupNotice();
+        renderSyncStatus();
+      }
+
+      /* ---------- 자정 경과 감지 ---------- */
+      let lastKnownToday = getTodayDateString();
+      function syncDateRollover() {
+        const today = getTodayDateString();
+        if (today === lastKnownToday) return;
+        if (appState.selectedDate === lastKnownToday) appState.selectedDate = today; // '오늘'을 보던 화면만 넘김
+        const sDate = $('student-form-date');
+        if (sDate) {
+          if (sDate.value === lastKnownToday) sDate.value = today;
+          sDate.min = addDays(today, -7);
+          sDate.max = addDays(today, 14);
+        }
+        lastKnownToday = today;
+        renderApp();
+      }
+
+      /* ---------- 표 / 카드 인라인 조작 ---------- */
+      function updateRecord(id, mutate, toastMsg) {
+        const rec = appState.records.find((r) => r.id === id);
+        if (!rec) return;
+        mutate(rec);
+        if (!persistRecords()) return;
+        renderApp();
+        if (toastMsg) showToast(typeof toastMsg === 'function' ? toastMsg(rec) : toastMsg);
+      }
+
+      function handleRecordAction(e) {
+        const target = e.target.closest('[data-action]');
+        if (!target || target.tagName === 'SELECT') return;
+        const id = target.dataset.id;
+        switch (target.dataset.action) {
+          case 'toggle-doc':
+            updateRecord(id, (rec) => {
+              const i = DOCS.indexOf(rec.documentStatus);
+              rec.documentStatus = DOCS[(i + 1) % DOCS.length];
+            }, (rec) => `증빙 서류: '${rec.documentStatus}'`);
+            break;
+          case 'toggle-contact':
+            updateRecord(id, (rec) => {
+              const pc = rec.parentContact;
+              const autoMemo = !pc.memo || pc.memo.startsWith('[학생 체크]') || pc.memo.startsWith('학부모 ');
+              if (!pc.contacted) {
+                Object.assign(pc, { contacted: true, method: '통화', contactedAt: nowHHMM() });
+                if (autoMemo) pc.memo = `학부모 통화 확인 (${pc.contactedAt})`;
+              } else if (pc.method === '통화') {
+                pc.method = '문자';
+                if (autoMemo) pc.memo = `학부모 문자 확인 (${pc.contactedAt})`;
+              } else {
+                Object.assign(pc, { contacted: false, method: null, contactedAt: null });
+              }
+            }, (rec) => (rec.parentContact.contacted ? `학부모 연락: ${rec.parentContact.method}` : '학부모 연락: 미확인'));
+            break;
+          case 'edit-contact-memo':
+            openContactEditModal(id);
+            break;
+          case 'toggle-neis':
+            updateRecord(id, (rec) => { rec.neisSynced = !rec.neisSynced; },
+              (rec) => (rec.neisSynced ? '나이스(NEIS) 입력 완료로 표시했습니다.' : '나이스 미입력으로 되돌렸습니다.'));
+            break;
+          case 'delete-record': {
+            const rec = appState.records.find((r) => r.id === id);
+            if (!rec) return;
+            const info = studentInfo(rec);
+            if (!confirm(`${rec.date} ${info.number ? info.number + '번 ' : ''}${info.name} 학생의 ${rec.type} 기록을 삭제할까요?`)) return;
+            appState.records = appState.records.filter((r) => r.id !== id);
+            if (!persistRecords()) return;
+            renderApp();
+            showToast('출결 기록을 삭제했습니다.');
+            break;
+          }
+          default: break;
+        }
+      }
+
+      function handlePeriodChange(e) {
+        if (e.target.dataset.action !== 'change-period') return;
+        const val = e.target.value === '' ? null : Number(e.target.value);
+        updateRecord(e.target.dataset.id, (rec) => { rec.checkInPeriod = val; },
+          val ? `${val}교시 등교로 기록했습니다.` : '등교 교시를 미기록으로 바꿨습니다.');
+      }
+
+      /* ---------- 학부모 연락 메모 모달 ---------- */
+      function openContactEditModal(recordId) {
+        const rec = appState.records.find((r) => r.id === recordId);
+        if (!rec) return;
+        const info = studentInfo(rec);
+        appState.contactEdit.recordId = recordId;
+        appState.contactEdit.status = rec.parentContact.contacted ? (rec.parentContact.method || '통화') : '미확인';
+        $('contact-edit-student-label').textContent = `대상 학생: ${info.number ? info.number + '번 ' : ''}${info.name} (${rec.date} ${rec.type})`;
+        $('contact-edit-memo-input').value = rec.parentContact.memo || '';
+        renderContactEditStatusButtons();
+        $('contact-edit-quick-memos').innerHTML = QUICK_MEMOS.map((m) => `
+        <button type="button" class="btn-ce-memo px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-[10px] font-medium transition-colors">${esc(m)}</button>`).join('');
+        $('modal-contact-edit').classList.remove('hidden');
+      }
+
+      function renderContactEditStatusButtons() {
+        $('contact-edit-status-group').querySelectorAll('.btn-c-status').forEach((btn) => {
+          const val = btn.dataset.status;
+          btn.className = val !== appState.contactEdit.status
+            ? 'btn-c-status py-2 rounded-xl font-bold border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100'
+            : val === '미확인'
+              ? 'btn-c-status py-2 rounded-xl font-bold border border-rose-300 bg-rose-600 text-white shadow-sm'
+              : 'btn-c-status py-2 rounded-xl font-bold border border-emerald-300 bg-emerald-600 text-white shadow-sm';
+        });
+      }
+
+      /* ---------- 빠른 출결 등록 모달 ---------- */
+      const CLS = {
+        typeOn: 'btn-type-opt py-2 rounded-xl font-bold bg-slate-900 text-white shadow-sm',
+        typeOff: 'btn-type-opt py-2 rounded-xl font-bold bg-slate-100 text-slate-700 hover:bg-slate-200',
+        catOn: 'btn-cat-opt py-1.5 rounded-lg font-bold bg-indigo-100 text-indigo-800 border border-indigo-300',
+        catOff: 'btn-cat-opt py-1.5 rounded-lg font-semibold bg-slate-50 text-slate-500 border border-slate-200',
+        periodOn: 'btn-period-chip flex-1 py-1.5 rounded-lg font-bold bg-amber-600 text-white',
+        periodOff: 'btn-period-chip flex-1 py-1.5 rounded-lg font-bold bg-white text-amber-900 border border-amber-200',
+        methodOn: 'flex-1 py-1 rounded-lg font-semibold bg-indigo-600 text-white',
+        methodOff: 'flex-1 py-1 rounded-lg font-semibold bg-white text-slate-600 border border-slate-200',
+        portalOn: 'btn-portal-type py-2.5 rounded-xl font-bold bg-slate-900 text-white shadow-sm',
+        portalOff: 'btn-portal-type py-2.5 rounded-xl font-bold bg-slate-100 text-slate-700 hover:bg-slate-200',
+      };
+
+      function applyModalSelection() {
+        const m = appState.modal;
+        document.querySelectorAll('#type-selector-group .btn-type-opt').forEach((b) => { b.className = b.dataset.val === m.type ? CLS.typeOn : CLS.typeOff; });
+        document.querySelectorAll('#category-selector-group .btn-cat-opt').forEach((b) => { b.className = b.dataset.val === m.category ? CLS.catOn : CLS.catOff; });
+        document.querySelectorAll('#modal-period-chips .btn-period-chip').forEach((b) => { b.className = Number(b.dataset.period) === m.checkInPeriod ? CLS.periodOn : CLS.periodOff; });
+        $('modal-late-period-box').classList.toggle('hidden', m.type !== '지각');
+        $('btn-method-call').className = m.contactMethod === '통화' ? CLS.methodOn : CLS.methodOff;
+        $('btn-method-sms').className = m.contactMethod === '문자' ? CLS.methodOn : CLS.methodOff;
+      }
+
+      function openModal() {
+        syncDateRollover();
+        appState.modal = defaultModalState(); // 이전 학생의 사유·교시가 남지 않도록 매번 초기화
+        $('modal-student-search').value = '';
+        $('modal-selected-student-id').value = '';
+        $('selected-student-badge').classList.add('hidden');
+        $('modal-reason-input').value = '';
+        $('modal-memo-input').value = '';
+        $('modal-contacted-checkbox').checked = false;
+        $('modal-contact-details').classList.add('hidden');
+        $('modal-date-subtitle').textContent = `일자: ${formatKoreanDate(appState.selectedDate)} · ${CONFIG.CLASS_LABEL}`;
+        applyModalSelection();
+        renderModalStudentChips();
+        $('modal-quick-reasons').innerHTML = QUICK_REASONS.map((r) => `
+        <button type="button" class="btn-q-reason px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-[11px] font-medium transition-colors">${esc(r)}</button>`).join('');
+        $('modal-quick-memos').innerHTML = QUICK_MEMOS.map((m) => `
+        <button type="button" class="btn-q-memo px-2 py-0.5 bg-white text-slate-600 border border-slate-200 rounded text-[10px] hover:bg-slate-100 transition-colors">${esc(m)}</button>`).join('');
+        $('modal-container').classList.remove('hidden');
+      }
+      const closeModal = () => $('modal-container').classList.add('hidden');
+
+      function chipStudents() {
+        if (appState.students.length) return appState.students;
+        // 명단이 없을 때는 번호만으로도 등록할 수 있게
+        return Array.from({ length: CONFIG.MAX_STUDENT_NUMBER }, (_, i) => ({ id: studentIdOf(i + 1), number: i + 1, name: '' }));
+      }
+
+      function renderModalStudentChips() {
+        const q = $('modal-student-search').value.trim().toLowerCase();
+        const list = chipStudents().filter((s) => !q || s.name.toLowerCase().includes(q) || String(s.number) === q);
+        $('modal-student-chips').innerHTML = list.map((st) => `
+        <button type="button" data-std-id="${esc(st.id)}"
+          class="std-chip-btn px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${appState.modal.studentId === st.id
+            ? 'bg-indigo-600 text-white shadow-sm' : 'bg-white text-slate-700 border border-slate-200 hover:border-indigo-300'}">
+          ${st.number}번 ${esc(st.name)}
+        </button>`).join('');
+      }
+
+      function submitAttendanceModal(e) {
+        e.preventDefault();
+        const m = appState.modal;
+        if (!m.studentId) { showToast('⚠️ 출결을 등록할 학생을 먼저 선택해 주세요.'); return; }
+        const dup = appState.records.find((r) => r.studentId === m.studentId && r.date === appState.selectedDate && r.type === m.type);
+        if (dup && !confirm(`같은 날짜에 같은 학생의 '${m.type}' 기록이 이미 있습니다.\n(${dup.source === 'student' ? '학생 신고' : '교사 등록'}: ${dup.reason || '사유 없음'})\n그래도 추가할까요?`)) return;
+
+        const contacted = $('modal-contacted-checkbox').checked;
+        const time = nowHHMM();
+        const rec = sanitizeRecord({
+          id: newId('rec'),
+          studentId: m.studentId,
+          date: appState.selectedDate,
+          type: m.type,
+          category: m.category,
+          reason: $('modal-reason-input').value.trim() || '(사유 확인중)',
+          checkInPeriod: m.type === '지각' ? m.checkInPeriod : null,
+          documentStatus: needsDocument(m.category) ? '미제출' : '해당없음',
+          parentContact: {
+            contacted,
+            method: contacted ? m.contactMethod : null,
+            memo: contacted ? $('modal-memo-input').value.trim() : '',
+            contactedAt: contacted ? time : null,
+          },
+          neisSynced: false,
+          source: 'teacher',
+        });
+        appState.records.push(rec);
+        if (!persistRecords()) { appState.records.pop(); return; }
+        renderApp();
+        closeModal();
+        const info = studentInfo(rec);
+        showToast(`${info.number}번 ${info.name === '명단 없음' ? '' : info.name} 학생의 ${rec.type}을(를) 등록했습니다.`);
+      }
+
+      /* ---------- CSV / JSON 백업 · 복원 ---------- */
+      function downloadBlob(content, type, filename) {
+        const blob = new Blob([content], { type });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+      }
+
+      // 모든 셀을 따옴표로 감싸고, =,+,-,@ 로 시작하면 ' 를 붙여 엑셀 수식으로 해석되지 않게 함
+      function csvCell(v) {
+        let s = String(v ?? '');
+        if (s.length > 1 && /^[=+\-@\t\r]/.test(s)) s = "'" + s;
+        return `"${s.replace(/"/g, '""')}"`;
+      }
+
+      function exportToCSV() {
+        const headers = ['일자', '학번', '번호', '성명', '성별', '근태구분', '사유범주', '상세사유', '등교교시', '학부모연락', '연락수단', '통화/문자메모', '증빙서류상태', '나이스반영', '접수경로'];
+        const rows = [...appState.records].sort((a, b) => a.date.localeCompare(b.date)
+          || (numberOfStudentId(a.studentId) ?? 999) - (numberOfStudentId(b.studentId) ?? 999)).map((rec) => {
+            const info = studentInfo(rec);
+            return [
+              rec.date, info.studentNumber, info.number ? `${info.number}번` : '', info.name, info.gender,
+              rec.type, rec.category, rec.reason,
+              rec.checkInPeriod ? `${rec.checkInPeriod}교시` : (rec.type === '지각' ? '미기록' : '-'),
+              rec.parentContact.contacted ? '완료' : '미확인', rec.parentContact.method || '-', rec.parentContact.memo,
+              rec.documentStatus, rec.neisSynced ? '입력완료' : '미입력', rec.source === 'student' ? '학생신고' : '교사등록',
+            ];
+          });
+        const csv = '﻿' + [headers, ...rows].map((r) => r.map(csvCell).join(',')).join('\r\n');
+        downloadBlob(csv, 'text/csv;charset=utf-8;', `${CONFIG.CLASS_LABEL.replace(/\s+/g, '')}_출결기록_전체_${getTodayDateString()}.csv`);
+        showToast('전체 기간 출결 기록을 CSV로 내보냈습니다.');
+      }
+
+      function exportBackupJSON() {
+        const payload = {
+          app: 'school-attendance', schema: 4, exportedAt: new Date().toISOString(),
+          classLabel: CONFIG.CLASS_LABEL, students: appState.students, records: appState.records,
+        };
+        downloadBlob(JSON.stringify(payload, null, 2), 'application/json', `출결백업_${CONFIG.CLASS_LABEL.replace(/\s+/g, '')}_${getTodayDateString()}.json`);
+        lsSet(KEYS.lastBackup, getTodayDateString());
+        renderSetupNotice();
+        renderSettingsInfo();
+        showToast('💾 백업 파일을 저장했습니다. 학교 PC 밖(USB·업무 드라이브)에도 보관하세요.');
+      }
+
+      // 복원 = id 기준 병합 (현재 기록을 지우지 않음)
+      function importBackupJSON(file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            const data = JSON.parse(reader.result);
+            const list = Array.isArray(data) ? data : data && data.records;
+            if (!Array.isArray(list)) throw new Error('records 배열이 없습니다');
+            const incoming = list.filter((r) => r && typeof r === 'object').map(sanitizeRecord);
+            const students = Array.isArray(data.students) ? data.students.map(sanitizeStudent).filter((s) => s && s.name) : [];
+            const msg = `백업에서 기록 ${incoming.length}건${students.length ? `, 명단 ${students.length}명` : ''}을 읽었습니다.\n현재 기록과 병합할까요? (지워지는 기록은 없습니다)`;
+            if (!confirm(msg)) return;
+            const byId = new Map(appState.records.map((r) => [r.id, r]));
+            incoming.forEach((r) => byId.set(r.id, r));
+            appState.records = [...byId.values()];
+            if (students.length && (!appState.students.length || confirm('백업에 들어 있는 학생 명단으로 바꿀까요?'))) {
+              appState.students = students.sort((a, b) => a.number - b.number);
+              lsSet(KEYS.roster, JSON.stringify(appState.students));
+            }
+            saveBlocked = false;
+            if (persistRecords()) { renderApp(); renderSettingsInfo(); showToast(`✅ ${incoming.length}건 복원(병합) 완료`); }
+          } catch (err) {
+            alert('백업 파일을 읽을 수 없습니다: ' + err.message);
+          }
+        };
+        reader.readAsText(file, 'utf-8');
+      }
+
+      /* ---------- 학생 신고함 (Google Apps Script) ---------- */
+      const API_ERRORS = {
+        invalid: '입력값을 다시 확인해 주세요.',
+        bad_date: '신고 날짜는 최근 7일 ~ 앞으로 14일 안에서만 고를 수 있어요.',
+        rate_limited: '방금 신고했어요. 1분 뒤에 다시 시도해 주세요.',
+        bad_code: '개인 확인 코드가 맞지 않습니다.',
+        denied: '교사 키가 맞지 않습니다.',
+        busy: '신고가 몰려 있어요. 잠시 후 다시 시도해 주세요.',
+      };
+
+      async function callApi(body) {
+        if (!CONFIG.API_URL) throw new Error('신고함 주소(API_URL)가 설정되지 않았습니다.');
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 20000);
+        try {
+          // text/plain 으로 보내야 CORS 사전 요청 없이 Apps Script 와 통신됩니다.
+          const res = await fetch(CONFIG.API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(body),
+            signal: ctrl.signal,
+          });
+          if (!res.ok) throw new Error(`서버 응답 오류 (HTTP ${res.status})`);
+          const data = await res.json();
+          if (!data.ok) throw new Error(API_ERRORS[data.error] || data.error || '요청이 거부되었습니다.');
+          return data;
+        } catch (e) {
+          if (e.name === 'AbortError') throw new Error('응답 시간이 초과되었습니다.');
+          if (e.name === 'SyntaxError') throw new Error('신고함 응답을 읽을 수 없습니다. (웹 앱 액세스 권한이 \'모든 사용자\'인지 확인)');
+          if (e instanceof TypeError) throw new Error('신고함에 연결할 수 없습니다. (인터넷 연결 · API_URL 확인)');
+          throw e;
+        } finally {
+          clearTimeout(timer);
+        }
+      }
+
+      function reportToRecord(rp) {
+        const number = Number(rp.number);
+        if (!Number.isInteger(number) || number < 1 || number > 99) return null;
+        const category = pick(rp.category, ['질병', '인정', '기타'], '기타');
+        return sanitizeRecord({
+          id: 'rpt-' + rp.id,
+          studentId: studentIdOf(number),
+          date: rp.date,
+          type: rp.type,
+          category,
+          reason: rp.reason,
+          checkInPeriod: rp.type === '지각' ? rp.period : null,
+          documentStatus: needsDocument(category) ? '미제출' : '해당없음',
+          // 학생이 체크한 것은 '확인 완료'가 아님 → 미확인으로 두고 담임이 직접 확인
+          parentContact: { contacted: false, memo: `[학생 체크] 보호자에게 알렸다고 응답 (${rp.receivedAt || ''} 접수)` },
+          neisSynced: false,
+          source: 'student',
+          submittedAt: rp.receivedAt,
+        });
+      }
+
+      async function fetchReports({ silent = false } = {}) {
+        const key = lsGet(KEYS.teacherKey, '');
+        if (!CONFIG.API_URL || !key) {
+          if (!silent) showToast('⚙️ 설정에서 신고함 연결(교사 키)을 먼저 해 주세요.');
+          renderSyncStatus();
+          return;
+        }
+        if (appState.sync.busy || !appState.isTeacherAuthenticated) return;
+        appState.sync.busy = true;
+        renderSyncStatus();
+        try {
+          const data = await callApi({ action: 'list', key });
+          const seen = new Set(lsJSON(KEYS.seenReports, []));
+          const fresh = [];
+          (data.reports || []).forEach((rp) => {
+            if (!rp || typeof rp.id !== 'string' || !/^[\w-]{1,60}$/.test(rp.id) || seen.has(rp.id)) return;
+            const rec = reportToRecord(rp);
+            if (rec) fresh.push({ rp, rec });
+          });
+          if (fresh.length) {
+            appState.records.push(...fresh.map((f) => f.rec));
+            if (!persistRecords()) {
+              appState.records = appState.records.filter((r) => !fresh.some((f) => f.rec === r));
+              throw new Error('받은 신고를 저장하지 못했습니다.');
+            }
+            fresh.forEach((f) => seen.add(f.rp.id)); // 저장에 성공한 뒤에만 '받음' 표시
+            lsSet(KEYS.seenReports, JSON.stringify([...seen].slice(-3000)));
+            renderApp();
+            showToast(`📥 학생 신고 ${fresh.length}건을 새로 받았습니다.`);
+          } else if (!silent) {
+            showToast('새 학생 신고가 없습니다.');
+          }
+          appState.sync.lastAt = nowHHMM();
+          appState.sync.error = '';
+        } catch (e) {
+          appState.sync.error = e.message;
+          if (!silent) showToast('⚠️ ' + e.message);
+        } finally {
+          appState.sync.busy = false;
+          renderSyncStatus();
+        }
+      }
+
+      async function purgeServerReports() {
+        const key = lsGet(KEYS.teacherKey, '');
+        const ids = lsJSON(KEYS.seenReports, []);
+        if (!CONFIG.API_URL || !key) { showToast('신고함이 연결되어 있지 않습니다.'); return; }
+        if (!ids.length) { showToast('이 기기에서 받아온 신고가 없습니다.'); return; }
+        if (!confirm('이 기기에 이미 받아온 신고를 서버(구글 시트)에서 삭제합니다.\n태블릿 등 다른 기기에서 아직 받지 않았다면 그 기기에서는 받을 수 없습니다. 계속할까요?')) return;
+        try {
+          const data = await callApi({ action: 'ack', key, ids: ids.slice(-500) });
+          showToast(`🗑️ 서버에서 ${data.deleted || 0}건을 삭제했습니다.`);
+        } catch (e) {
+          showToast('⚠️ ' + e.message);
+        }
+      }
+
+      async function saveAndTestTeacherKey() {
+        const key = $('teacher-key-input').value.trim();
+        if (!key) { lsDel(KEYS.teacherKey); renderSettingsInfo(); renderApp(); showToast('교사 키를 지웠습니다.'); return; }
+        lsSet(KEYS.teacherKey, key);
+        const badge = $('api-state');
+        badge.textContent = '확인 중…';
+        badge.className = 'x-badge';
+        try {
+          const data = await callApi({ action: 'ping', key });
+          badge.textContent = `연결됨 · 대기 ${data.pending ?? 0}건`;
+          badge.className = 'x-badge is-ok';
+          renderApp();
+          fetchReports({ silent: true });
+        } catch (e) {
+          badge.textContent = '연결 실패';
+          badge.className = 'x-badge is-error';
+          showToast('⚠️ ' + e.message);
+        }
+      }
+
+      /* ---------- 설정 모달 ---------- */
+      function renderSettingsInfo() {
+        $('roster-count').textContent = `${appState.students.length}명`;
+        const badge = $('api-state');
+        if (!CONFIG.API_URL) { badge.textContent = 'API_URL 미설정'; badge.className = 'x-badge is-error'; }
+        else if (!lsGet(KEYS.teacherKey)) { badge.textContent = '교사 키 없음'; badge.className = 'x-badge'; }
+        else if (!badge.classList.contains('is-ok')) { badge.textContent = '키 저장됨'; badge.className = 'x-badge'; }
+        const last = lsGet(KEYS.lastBackup);
+        $('last-backup-text').textContent = last ? `마지막 백업: ${last}` : '아직 백업한 적이 없습니다.';
+      }
+
+      function openSettings() {
+        $('roster-input').value = rosterToText(appState.students);
+        $('teacher-key-input').value = lsGet(KEYS.teacherKey, '');
+        renderSettingsInfo();
+        $('modal-settings').classList.remove('hidden');
+      }
+
+      function saveRoster() {
+        const text = $('roster-input').value;
+        const parsed = parseRosterText(text);
+        if (!parsed.length && text.trim()) { showToast('⚠️ 명단을 읽지 못했습니다. "번호 이름" 형식인지 확인해 주세요.'); return; }
+        if (!confirm(`학생 ${parsed.length}명으로 명단을 저장할까요?\n(${parsed.slice(0, 3).map((s) => `${s.number}번 ${s.name}`).join(', ')}${parsed.length > 3 ? ' …' : ''})`)) return;
+        if (!lsSet(KEYS.roster, JSON.stringify(parsed))) { showToast('⚠️ 명단 저장에 실패했습니다.'); return; }
+        appState.students = parsed;
+        $('roster-input').value = rosterToText(parsed);
+        renderSettingsInfo();
+        renderApp();
+        showToast(`✅ 학생 ${parsed.length}명 명단을 저장했습니다.`);
+      }
+
+      async function copyStudentLink() {
+        const url = location.href.split(/[?#]/)[0] + '?mode=student';
+        try {
+          await navigator.clipboard.writeText(url);
+          showToast('📋 학생용 링크를 복사했습니다.');
+        } catch (_) {
+          prompt('아래 학생용 링크를 복사하세요.', url);
+        }
+      }
+
+      /* ---------- 인증 · 화면 전환 ---------- */
+      let idleTimer = null;
+      function resetIdle() {
+        clearTimeout(idleTimer);
+        if (appState.isTeacherAuthenticated) {
+          idleTimer = setTimeout(() => lockTeacherScreen(`⏱️ ${CONFIG.IDLE_LOCK_MINUTES}분 동안 사용하지 않아 화면을 잠갔습니다.`),
+            CONFIG.IDLE_LOCK_MINUTES * 60 * 1000);
+        }
+      }
+      function setAuthenticated(on) {
+        appState.isTeacherAuthenticated = on;
+        try { if (on) sessionStorage.setItem(KEYS.auth, '1'); else sessionStorage.removeItem(KEYS.auth); } catch (_) { /* 무시 */ }
+        resetIdle();
+      }
+      const setTeacherControls = (visible) => document.querySelectorAll('.teacher-only-ctrl').forEach((el) => el.classList.toggle('hidden', !visible));
+      const hideAllModals = () => ['modal-container', 'modal-contact-edit', 'modal-settings', 'modal-pin-change', 'modal-pin-auth']
+        .forEach((id) => $(id)?.classList.add('hidden'));
+
+      function initStudentPortalForm() {
+        const today = getTodayDateString();
+        const sel = $('student-form-number');
+        sel.innerHTML = '<option value="">번호 선택</option>'
+          + Array.from({ length: CONFIG.MAX_STUDENT_NUMBER }, (_, i) => `<option value="${i + 1}">${i + 1}번</option>`).join('');
+        const dateInput = $('student-form-date');
+        dateInput.value = today;
+        dateInput.min = addDays(today, -7);
+        dateInput.max = addDays(today, 14);
+        $('student-code-box').classList.toggle('hidden', !CONFIG.REQUIRE_STUDENT_CODE);
+        $('student-form-code').required = CONFIG.REQUIRE_STUDENT_CODE;
+        appState.portal.type = '결석';
+        document.querySelectorAll('#student-form-type-group .btn-portal-type').forEach((b) => { b.className = b.dataset.val === '결석' ? CLS.portalOn : CLS.portalOff; });
+        $('student-portal-late-box').classList.add('hidden');
+      }
+
+      function switchToStudentView() {
+        setAuthenticated(false);   // 학생 화면 = 항상 잠금 (태블릿을 건네는 순간 잠김)
+        setTeacherControls(false);
+        hideAllModals();
+        clearTeacherDom();
+        appState.currentView = 'student';
+        $('view-teacher-dashboard').classList.add('hidden');
+        $('view-student-portal').classList.remove('hidden');
+        $('btn-toggle-view-text').textContent = '🖥️ 교사용 데스크 (PIN)';
+        $('student-portal-receipt').classList.add('hidden');
+        $('form-student-submit').classList.remove('hidden');
+        $('form-student-submit').reset();
+        initStudentPortalForm();
+        window.scrollTo({ top: 0 });
+      }
+
+      function switchToTeacherView() {
+        if (!appState.isTeacherAuthenticated) { requestTeacherAccess(); return; }
+        appState.currentView = 'teacher';
+        setTeacherControls(true);
+        $('view-student-portal').classList.add('hidden');
+        $('view-teacher-dashboard').classList.remove('hidden');
+        $('btn-toggle-view-text').textContent = '📱 학생 신고 폼 열기';
+        renderApp();
+        fetchReports({ silent: true });
+        window.scrollTo({ top: 0 });
+      }
+
+      function lockTeacherScreen(message) {
+        switchToStudentView();
+        showToast(message || '🔒 교사용 화면을 잠갔습니다. (PIN 입력 필요)');
+      }
+
+      let pinSetupMode = false;
+      function openPinChange(setup) {
+        pinSetupMode = setup;
+        $('pin-change-title').textContent = setup ? '교사 PIN 처음 설정' : '교사 보안 PIN 변경';
+        $('pin-setup-hint').classList.toggle('hidden', !setup);
+        $('current-pin-box').classList.toggle('hidden', setup);
+        $('input-current-pin').required = !setup;
+        ['input-current-pin', 'input-new-pin', 'input-new-pin-confirm'].forEach((id) => { $(id).value = ''; });
+        $('modal-pin-change').classList.remove('hidden');
+        setTimeout(() => $(setup ? 'input-new-pin' : 'input-current-pin').focus(), 100);
+      }
+
+      function requestTeacherAccess() {
+        if (appState.isStudentLinkMode) return;
+        if (appState.isTeacherAuthenticated) { switchToTeacherView(); return; }
+        if (!lsGet(KEYS.pin)) { openPinChange(true); return; } // 기본 PIN(1234) 없이 처음 사용 시 직접 설정
+        $('input-pin-code').value = '';
+        $('pin-error-msg').classList.add('hidden');
+        $('modal-pin-auth').classList.remove('hidden');
+        setTimeout(() => $('input-pin-code').focus(), 100);
+      }
+
+      function readPinFail() {
+        const f = lsJSON(KEYS.pinFail, null);
+        return f && typeof f.n === 'number' ? f : { n: 0, until: 0 };
+      }
+
+      function verifyPin(e) {
+        e.preventDefault();
+        const f = readPinFail();
+        if (Date.now() < f.until) {
+          showToast(`⏳ ${Math.ceil((f.until - Date.now()) / 1000)}초 후 다시 시도하세요.`);
+          return;
+        }
+        const input = $('input-pin-code');
+        if (input.value.trim() === lsGet(KEYS.pin)) {
+          lsDel(KEYS.pinFail);
+          setAuthenticated(true);
+          $('modal-pin-auth').classList.add('hidden');
+          switchToTeacherView();
+          showToast('✅ 선생님 인증이 완료되었습니다.');
+        } else {
+          f.n += 1;
+          if (f.n % 5 === 0) f.until = Date.now() + 30000 * 2 ** (f.n / 5 - 1); // 5회마다 30초 → 60초 → 120초 …
+          lsSet(KEYS.pinFail, JSON.stringify(f));
+          $('pin-error-msg').classList.remove('hidden');
+          input.value = '';
+          input.focus();
+        }
+      }
+
+      function changePin(e) {
+        e.preventDefault();
+        const cur = $('input-current-pin').value.trim();
+        const next = $('input-new-pin').value.trim();
+        const again = $('input-new-pin-confirm').value.trim();
+        if (!pinSetupMode && cur !== lsGet(KEYS.pin)) { showToast('현재 PIN 번호가 일치하지 않습니다.'); return; }
+        if (!/^\d{4}$/.test(next)) { showToast('새 PIN 번호는 숫자 4자리여야 합니다.'); return; }
+        if (['0000', '1234', '1111'].includes(next)) { showToast('너무 쉬운 번호입니다. 다른 번호를 골라 주세요.'); return; }
+        if (next !== again) { showToast('새 PIN 번호 확인이 일치하지 않습니다.'); return; }
+        if (!lsSet(KEYS.pin, next)) { showToast('⚠️ PIN을 저장하지 못했습니다.'); return; }
+        $('modal-pin-change').classList.add('hidden');
+        if (pinSetupMode) {
+          setAuthenticated(true);
+          switchToTeacherView();
+          showToast('✅ PIN을 설정했습니다. 설정(⚙️)에서 학생 명단부터 등록해 주세요.');
+        } else {
+          showToast('✅ 교사 PIN을 변경했습니다.');
+        }
+      }
+
+      /* ---------- 학생 신고 제출 ---------- */
+      function addLocalStudentReport(p) {
+        // API_URL 이 없을 때(같은 기기 키오스크 사용)만 쓰는 예전 방식
+        const rec = reportToRecord({ ...p, id: newId('local'), receivedAt: `${p.date.slice(5)} ${nowHHMM()}` });
+        appState.records.push(rec);
+        if (!persistRecords()) { appState.records.pop(); throw new Error('이 기기에 저장하지 못했습니다.'); }
+      }
+
+      async function submitStudentReport(e) {
+        e.preventDefault();
+        const number = Number($('student-form-number').value);
+        const date = $('student-form-date').value;
+        const today = getTodayDateString();
+        const reason = $('student-form-reason').value.trim();
+        if (!number) { showToast('출석 번호를 선택해 주세요.'); return; }
+        if (!date || date < addDays(today, -7) || date > addDays(today, 14)) { showToast(API_ERRORS.bad_date); return; }
+        if (!reason) { showToast('사유를 짧게 적어 주세요.'); return; }
+        if (!$('student-form-agree').checked) { showToast('보호자(부모님) 연락 확인란에 체크해 주세요.'); return; }
+
+        const payload = {
+          action: 'submit',
+          number,
+          date,
+          type: appState.portal.type,
+          category: $('student-form-category').value,
+          reason,
+          period: appState.portal.type === '지각' ? (Number($('student-form-period').value) || null) : null,
+          code: CONFIG.REQUIRE_STUDENT_CODE ? $('student-form-code').value.trim() : '',
+        };
+        const btn = $('btn-student-submit');
+        const btnText = $('btn-student-submit-text');
+        btn.disabled = true;
+        btnText.textContent = '보내는 중…';
+        try {
+          if (CONFIG.API_URL) await callApi(payload);
+          else if (!appState.isStudentLinkMode) addLocalStudentReport(payload);
+          else throw new Error('아직 신고함이 연결되지 않았습니다.');
+          $('form-student-submit').classList.add('hidden');
+          $('receipt-details-text').textContent = `${date} ${number}번 학생의 ${payload.type}(${payload.category}) 신고가 접수되었습니다.`;
+          $('student-portal-receipt').classList.remove('hidden');
+          window.scrollTo({ top: 0 });
+        } catch (err) {
+          alert(`⚠️ 신고를 보내지 못했습니다.\n${err.message}\n\n잠시 후 다시 시도하거나 담임선생님께 직접 연락해 주세요.`);
+        } finally {
+          btn.disabled = false;
+          btnText.textContent = '담임선생님께 출결 신고하기';
+        }
+      }
+
+      /* ---------- 이벤트 연결 ---------- */
+      function bindEvents() {
+        // 표/카드: 위임 방식
+        ['desktop-table-body', 'mobile-card-list'].forEach((id) => {
+          $(id).addEventListener('click', handleRecordAction);
+          $(id).addEventListener('change', handlePeriodChange);
+        });
+        $('filter-tabs').addEventListener('click', (e) => {
+          const b = e.target.closest('[data-filter]');
+          if (!b) return;
+          appState.activeFilter = b.dataset.filter;
+          renderApp();
+        });
+        $('setup-notice').addEventListener('click', (e) => {
+          const b = e.target.closest('[data-notice]');
+          if (!b) return;
+          if (b.dataset.notice === 'settings') openSettings();
+          if (b.dataset.notice === 'backup') exportBackupJSON();
+        });
+
+        // 날짜 이동
+        const moveDate = (n) => { appState.selectedDate = addDays(appState.selectedDate, n); renderApp(); };
+        $('btn-prev-day').addEventListener('click', () => moveDate(-1));
+        $('btn-next-day').addEventListener('click', () => moveDate(1));
+        $('btn-today').addEventListener('click', () => { appState.selectedDate = getTodayDateString(); renderApp(); });
+        $('input-date-picker').addEventListener('change', (e) => {
+          if (/^\d{4}-\d{2}-\d{2}$/.test(e.target.value)) { appState.selectedDate = e.target.value; renderApp(); }
+        });
+
+        // 검색
+        const search = $('input-search');
+        const clearBtn = $('btn-clear-search');
+        search.addEventListener('input', () => {
+          appState.searchQuery = search.value;
+          clearBtn.classList.toggle('hidden', !search.value);
+          renderApp();
+        });
+        clearBtn.addEventListener('click', () => {
+          search.value = '';
+          appState.searchQuery = '';
+          clearBtn.classList.add('hidden');
+          renderApp();
+        });
+
+        // 헤더 · 툴바
+        $('btn-export-csv').addEventListener('click', exportToCSV);
+        $('btn-open-settings').addEventListener('click', openSettings);
+        $('btn-lock-screen').addEventListener('click', () => lockTeacherScreen());
+        $('btn-sync').addEventListener('click', () => fetchReports());
+        $('btn-toggle-view').addEventListener('click', () => {
+          if (appState.currentView === 'teacher') switchToStudentView();
+          else requestTeacherAccess();
+        });
+        $('btn-return-teacher').addEventListener('click', requestTeacherAccess);
+
+        // 설정 모달
+        $('btn-close-settings').addEventListener('click', () => $('modal-settings').classList.add('hidden'));
+        $('btn-save-roster').addEventListener('click', saveRoster);
+        $('btn-test-api').addEventListener('click', saveAndTestTeacherKey);
+        $('btn-copy-student-link').addEventListener('click', copyStudentLink);
+        $('btn-purge-server').addEventListener('click', purgeServerReports);
+        $('btn-backup-json').addEventListener('click', exportBackupJSON);
+        $('input-restore-json').addEventListener('change', (e) => {
+          const f = e.target.files[0];
+          if (f) importBackupJSON(f);
+          e.target.value = '';
+        });
+        $('btn-open-pin-setting').addEventListener('click', () => openPinChange(false));
+
+        // PIN
+        $('form-pin-verify').addEventListener('submit', verifyPin);
+        $('btn-cancel-pin').addEventListener('click', () => $('modal-pin-auth').classList.add('hidden'));
+        $('form-change-pin-submit').addEventListener('submit', changePin);
+        $('btn-close-pin-change').addEventListener('click', () => $('modal-pin-change').classList.add('hidden'));
+
+        // 학부모 연락 메모 모달
+        const closeContact = () => $('modal-contact-edit').classList.add('hidden');
+        $('btn-close-contact-edit').addEventListener('click', closeContact);
+        $('btn-cancel-contact-edit').addEventListener('click', closeContact);
+        $('contact-edit-status-group').addEventListener('click', (e) => {
+          const b = e.target.closest('.btn-c-status');
+          if (!b) return;
+          appState.contactEdit.status = b.dataset.status;
+          renderContactEditStatusButtons();
+        });
+        $('contact-edit-quick-memos').addEventListener('click', (e) => {
+          const b = e.target.closest('.btn-ce-memo');
+          if (b) $('contact-edit-memo-input').value = b.textContent.trim();
+        });
+        $('form-contact-edit').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const status = appState.contactEdit.status;
+          const memo = $('contact-edit-memo-input').value.trim();
+          updateRecord(appState.contactEdit.recordId, (rec) => {
+            rec.parentContact = status === '미확인'
+              ? { contacted: false, method: null, memo, contactedAt: null }
+              : { contacted: true, method: status, memo, contactedAt: rec.parentContact.contactedAt || nowHHMM() };
+          }, '✅ 학부모 연락 상태와 메모를 저장했습니다.');
+          closeContact();
+        });
+
+        // 빠른 출결 등록 모달
+        $('btn-open-modal').addEventListener('click', openModal);
+        $('btn-close-modal').addEventListener('click', closeModal);
+        $('modal-student-search').addEventListener('input', renderModalStudentChips);
+        $('modal-student-chips').addEventListener('click', (e) => {
+          const b = e.target.closest('.std-chip-btn');
+          if (!b) return;
+          appState.modal.studentId = b.dataset.stdId;
+          $('modal-selected-student-id').value = b.dataset.stdId;
+          const badge = $('selected-student-badge');
+          badge.textContent = `✓ ${b.textContent.trim()}`;
+          badge.classList.remove('hidden');
+          renderModalStudentChips();
+        });
+        $('type-selector-group').addEventListener('click', (e) => {
+          const b = e.target.closest('.btn-type-opt');
+          if (!b) return;
+          appState.modal.type = b.dataset.val;
+          if (b.dataset.val !== '지각') appState.modal.checkInPeriod = null;
+          applyModalSelection();
+        });
+        $('category-selector-group').addEventListener('click', (e) => {
+          const b = e.target.closest('.btn-cat-opt');
+          if (!b) return;
+          appState.modal.category = b.dataset.val;
+          applyModalSelection();
+        });
+        $('modal-period-chips').addEventListener('click', (e) => {
+          const b = e.target.closest('.btn-period-chip');
+          if (!b) return;
+          const val = Number(b.dataset.period);
+          appState.modal.checkInPeriod = appState.modal.checkInPeriod === val ? null : val;
+          applyModalSelection();
+        });
+        $('modal-quick-reasons').addEventListener('click', (e) => {
+          const b = e.target.closest('.btn-q-reason');
+          if (b) $('modal-reason-input').value = b.textContent.trim();
+        });
+        $('modal-quick-memos').addEventListener('click', (e) => {
+          const b = e.target.closest('.btn-q-memo');
+          if (b) $('modal-memo-input').value = b.textContent.trim();
+        });
+        $('modal-contacted-checkbox').addEventListener('change', (e) => {
+          $('modal-contact-details').classList.toggle('hidden', !e.target.checked);
+        });
+        $('btn-method-call').addEventListener('click', () => { appState.modal.contactMethod = '통화'; applyModalSelection(); });
+        $('btn-method-sms').addEventListener('click', () => { appState.modal.contactMethod = '문자'; applyModalSelection(); });
+        $('form-attendance').addEventListener('submit', submitAttendanceModal);
+
+        // 학생 신고 폼
+        $('student-form-type-group').addEventListener('click', (e) => {
+          const b = e.target.closest('.btn-portal-type');
+          if (!b) return;
+          appState.portal.type = b.dataset.val;
+          document.querySelectorAll('#student-form-type-group .btn-portal-type').forEach((x) => { x.className = x === b ? CLS.portalOn : CLS.portalOff; });
+          $('student-portal-late-box').classList.toggle('hidden', b.dataset.val !== '지각');
+        });
+        document.querySelectorAll('.btn-portal-quick-reason').forEach((b) => {
+          b.addEventListener('click', () => { $('student-form-reason').value = b.textContent.trim(); });
+        });
+        $('form-student-submit').addEventListener('submit', submitStudentReport);
+        $('btn-receipt-new-submit').addEventListener('click', () => {
+          $('student-portal-receipt').classList.add('hidden');
+          $('form-student-submit').classList.remove('hidden');
+          $('form-student-submit').reset();
+          initStudentPortalForm();
+        });
+
+        // Esc 로 맨 위 모달 닫기
+        document.addEventListener('keydown', (e) => {
+          if (e.key !== 'Escape') return;
+          const open = ['modal-pin-change', 'modal-contact-edit', 'modal-container', 'modal-settings', 'modal-pin-auth']
+            .map($).find((m) => m && !m.classList.contains('hidden'));
+          open?.classList.add('hidden');
+        });
+
+        // 자동 잠금 타이머 갱신
+        ['click', 'keydown', 'touchstart'].forEach((ev) => document.addEventListener(ev, () => {
+          if (appState.isTeacherAuthenticated) resetIdle();
+        }, { passive: true }));
+
+        // 자정 경과 · 다른 탭 변경 · 신고함 자동 확인
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) return;
+          syncDateRollover();
+          if (appState.isTeacherAuthenticated && appState.currentView === 'teacher') fetchReports({ silent: true });
+        });
+        window.addEventListener('focus', syncDateRollover);
+        setInterval(syncDateRollover, 60 * 1000);
+        setInterval(() => {
+          if (!document.hidden && appState.isTeacherAuthenticated && appState.currentView === 'teacher') fetchReports({ silent: true });
+        }, CONFIG.AUTO_SYNC_SECONDS * 1000);
+        window.addEventListener('storage', (e) => {
+          if (e.key === KEYS.records) appState.records = loadRecords();
+          else if (e.key === KEYS.roster) appState.students = loadRoster();
+          else return;
+          renderApp();
+        });
+      }
+
+      /* ---------- 시작 ---------- */
+      function applyConfigText() {
+        const map = { classLabel: CONFIG.CLASS_LABEL, teacherName: CONFIG.TEACHER_NAME, retentionDays: CONFIG.RETENTION_DAYS };
+        document.querySelectorAll('[data-cfg]').forEach((el) => { el.textContent = map[el.dataset.cfg] ?? el.textContent; });
+      }
+
+      function init() {
+        applyConfigText();
+        bindEvents();
+        const mode = new URLSearchParams(location.search).get('mode');
+        appState.isStudentLinkMode = mode === 'student' || mode === 'parent';
+        if (appState.isStudentLinkMode) {
+          document.title = `${CONFIG.CLASS_LABEL} 출결 신고`;
+          $('btn-toggle-view').classList.add('hidden');
+          $('return-teacher-wrap').classList.add('hidden');
+          switchToStudentView();
+        } else if (appState.isTeacherAuthenticated) {
+          switchToTeacherView();
+        } else {
+          switchToStudentView();
+          requestTeacherAccess();
+        }
+      }
+
+      init();
+    })();
+  </script>
+
+</body>
+
+</html>
