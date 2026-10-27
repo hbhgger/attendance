@@ -2107,6 +2107,26 @@
     .x-btn-danger:hover {
       background: #ffe4e6
     }
+
+    .x-label {
+      display: block;
+      margin-top: .75rem;
+      font-size: 11px;
+      font-weight: 700;
+      color: #475569
+    }
+
+    .x-link-btn {
+      margin-top: .25rem;
+      padding: 0;
+      background: none;
+      border: 0;
+      color: #4f46e5;
+      font-size: 11px;
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer
+    }
   </style>
 </head>
 
@@ -2708,6 +2728,9 @@
       </div>
 
       <form id="form-pin-verify" class="space-y-4">
+        <div id="pin-class-box" class="hidden">
+          <select id="pin-class-select" class="x-input" aria-label="학급 선택"></select>
+        </div>
         <div>
           <input type="password" id="input-pin-code" inputmode="numeric" maxlength="4" placeholder="PIN 4자리 입력"
             autocomplete="off"
@@ -2726,6 +2749,7 @@
             인증 및 데스크 열기
           </button>
         </div>
+        <button type="button" id="btn-new-class" class="x-link-btn">+ 새 학급 만들기 (이 기기를 함께 쓰는 다른 선생님)</button>
       </form>
     </div>
   </div>
@@ -2773,7 +2797,32 @@
     </div>
   </div>
 
-  <!-- ⚙️ 설정 모달: 명단 · 신고함 연결 · 백업/복원 · PIN -->
+  <!-- 🏫 새 학급 만들기 모달 (학급마다 기록·명단·PIN을 따로 저장) -->
+  <div id="modal-profile-new"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 hidden">
+    <div class="x-panel anim-fade-in">
+      <div class="x-panel-head">
+        <h3>새 학급 만들기</h3>
+        <button type="button" id="btn-close-profile-new" class="x-icon-btn" aria-label="닫기">✕</button>
+      </div>
+      <form id="form-profile-new" class="x-panel-body">
+        <section class="x-section">
+          <p class="x-hint">이 기기에서 쓸 학급을 만듭니다. 학급마다 출결 기록·명단·PIN이 <b>따로</b> 저장되어, 같은 PC를 여러 선생님이 써도 섞이지 않습니다.</p>
+          <label class="x-label" for="new-class-label">학급 이름</label>
+          <input id="new-class-label" class="x-input" maxlength="20" placeholder="예: 2학년 3반" required>
+          <label class="x-label" for="new-class-max">마지막 출석 번호</label>
+          <input id="new-class-max" type="number" class="x-input" min="1" max="40" value="30" required>
+          <label class="x-label" for="new-class-pin">PIN 4자리</label>
+          <input id="new-class-pin" type="password" inputmode="numeric" maxlength="4" class="x-input" autocomplete="off" required>
+          <label class="x-label" for="new-class-pin2">PIN 확인</label>
+          <input id="new-class-pin2" type="password" inputmode="numeric" maxlength="4" class="x-input" autocomplete="off" required>
+          <div class="x-row"><button type="submit" class="x-btn x-btn-primary">학급 만들기</button></div>
+        </section>
+      </form>
+    </div>
+  </div>
+
+  <!-- ⚙️ 설정 모달: 학급 정보 · 명단 · 신고함 연결 · 백업/복원 · PIN -->
   <div id="modal-settings"
     class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 hidden">
     <div class="x-panel anim-fade-in">
@@ -2783,7 +2832,21 @@
       </div>
       <div class="x-panel-body">
         <section class="x-section">
-          <h4>1. 학생 명단 <span id="roster-count" class="x-badge">0명</span></h4>
+          <h4>1. 학급 정보 <span id="class-state" class="x-badge"></span></h4>
+          <label class="x-label" for="class-label-input">학급 이름</label>
+          <input id="class-label-input" class="x-input" maxlength="20" placeholder="예: 2학년 3반">
+          <label class="x-label" for="class-max-input">마지막 출석 번호 (학생 폼 번호 목록)</label>
+          <input id="class-max-input" type="number" min="1" max="40" class="x-input">
+          <label class="x-label" for="inbox-url-input">학생 신고함 웹 앱 주소</label>
+          <input id="inbox-url-input" class="x-input x-mono" autocomplete="off"
+            placeholder="https://script.google.com/macros/s/…/exec">
+          <p class="x-hint">신고함 시트 사본 → setup 실행 → 웹 앱 배포에서 받은 주소입니다 (시작 안내서 참고).
+            비워 두면 학생 신고 없이 교사용으로만 씁니다.</p>
+          <div class="x-row"><button type="button" id="btn-save-class" class="x-btn x-btn-primary">학급 정보 저장</button></div>
+        </section>
+
+        <section class="x-section">
+          <h4>2. 학생 명단 <span id="roster-count" class="x-badge">0명</span></h4>
           <p class="x-hint">한 줄에 한 명씩 붙여넣으세요. 예: <code>1 홍길동</code>, <code>20301 홍길동 남</code> (NEIS·엑셀에서 복사해도 됩니다).
             명단은 <b>이 기기 브라우저에만</b> 저장되고 인터넷에 올라가지 않습니다.</p>
           <textarea id="roster-input" rows="7" class="x-input x-mono"
@@ -2792,8 +2855,8 @@
         </section>
 
         <section class="x-section">
-          <h4>2. 학생 신고함 연결 <span id="api-state" class="x-badge">미연결</span></h4>
-          <p class="x-hint">설정 가이드 3단계에서 받은 <b>교사 키</b>를 입력하세요. 교사 키는 이 기기에만 저장됩니다.</p>
+          <h4>3. 학생 신고함 연결 <span id="api-state" class="x-badge">미연결</span></h4>
+          <p class="x-hint">신고함 <b>setup</b> 실행 로그에 나온 <b>교사 키</b>를 입력하세요. 교사 키는 이 기기에만 저장됩니다.</p>
           <div class="x-row">
             <input type="password" id="teacher-key-input" class="x-input" autocomplete="off" placeholder="교사 키">
             <button type="button" id="btn-test-api" class="x-btn x-btn-primary">저장 · 연결 테스트</button>
@@ -2807,7 +2870,7 @@
         </section>
 
         <section class="x-section">
-          <h4>3. 데이터 백업 · 복원</h4>
+          <h4>4. 데이터 백업 · 복원</h4>
           <p class="x-hint">출결 기록은 이 기기의 브라우저에만 저장됩니다. PC 복원 프로그램·브라우저 정리에 대비해 <b>주 1회 백업</b>하세요.
             복원하면 기존 기록과 <b>병합</b>됩니다(지우지 않음). 다른 기기로 옮길 때도 이 기능을 쓰세요.</p>
           <div class="x-row">
@@ -2819,8 +2882,11 @@
         </section>
 
         <section class="x-section">
-          <h4>4. 보안</h4>
-          <div class="x-row"><button type="button" id="btn-open-pin-setting" class="x-btn">🔑 PIN 변경</button></div>
+          <h4>5. 보안 · 학급 관리</h4>
+          <div class="x-row">
+            <button type="button" id="btn-open-pin-setting" class="x-btn">🔑 PIN 변경</button>
+            <button type="button" id="btn-delete-class" class="x-btn x-btn-danger">이 기기에서 학급 삭제</button>
+          </div>
           <p class="x-hint">PIN은 교실에서 화면을 가리는 잠금입니다. 학생이 개발자 도구를 다룰 수 있는 기기에는 교사 데이터를 두지 마세요.</p>
         </section>
       </div>
@@ -2842,7 +2908,10 @@
       'use strict';
 
       /* =========================================================
-       *  ① 배포 전에 여기만 수정하세요
+       *  ① 기본 학급 설정
+       *  - 학급 구분 기능 이전에 나눠 준 학생 링크(?mode=student, inbox 값 없음)와
+       *    이 기기에 이미 있던 데이터('기본 학급')가 이 값을 씁니다.
+       *  - 다른 선생님의 학급은 앱의 [설정 → 1. 학급 정보]에서 정하므로 여기를 고칠 필요가 없습니다.
        * ========================================================= */
       const CONFIG = {
         API_URL: 'https://script.google.com/macros/s/AKfycbyWFJETcKJIXwQUYmhAkgK0TlyDFoJLcBTVKjq71kjYalzps1K8LogSEW95rZL134cn/exec',                  // Apps Script 웹 앱 주소 (https://script.google.com/macros/s/…/exec)
@@ -2853,6 +2922,7 @@
         RETENTION_DAYS: 7,            // Code.gs 의 RETENTION_DAYS 와 같게 맞추세요 (안내 문구용)
         AUTO_SYNC_SECONDS: 120,       // 교사 화면이 열려 있을 때 신고함 자동 확인 간격
         IDLE_LOCK_MINUTES: 10,        // 이 시간 동안 입력이 없으면 교사 화면 자동 잠금
+        DEV_API_OVERRIDE: '',         // 로컬 테스트 서버(개발도구/mock_server.py) 전용 — 항상 비워 두세요
       };
 
       /* ---------- 공통 유틸 ---------- */
@@ -2896,6 +2966,119 @@
       function lsDel(key) { try { localStorage.removeItem(key); } catch (_) { /* 무시 */ } }
       function lsJSON(key, fallback) {
         try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch (_) { return fallback; }
+      }
+
+      /* ---------- 학급(프로필): 같은 기기를 여러 선생님이 써도 기록이 섞이지 않게 ---------- */
+      const PROFILE_STORE = 'school_attendance_profiles_v1';
+      const INBOX_RE = /^https:\/\/script\.google\.com\/(?:a\/macros\/([a-z0-9.-]+)|macros)\/s\/([A-Za-z0-9_-]{20,200})\/exec$/;
+      const MAX_NUMBER_LIMIT = 40;   // Code.gs 의 MAX_NUMBER 와 같게
+      const WEAK_PINS = ['0000', '1234', '1111'];
+      let profile = null;            // 지금 열려 있는 학급
+      let linkCtx = null;            // 학생 링크 모드: URL 로 받은 학급 정보
+
+      function parseInbox(url) {
+        const m = INBOX_RE.exec(String(url || '').trim());
+        return m ? { domain: m[1] || '', id: m[2] } : null;
+      }
+      const inboxUrlOf = (p) => (p.domain
+        ? `https://script.google.com/a/macros/${p.domain}/s/${p.id}/exec`
+        : `https://script.google.com/macros/s/${p.id}/exec`);
+      const clampNumber = (v, def) => { const n = Number(v); return Number.isInteger(n) && n >= 1 && n <= MAX_NUMBER_LIMIT ? n : def; };
+      const newProfileId = () => 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+
+      function sanitizeProfile(p) {
+        if (!p || typeof p.id !== 'string' || !/^[\w-]{1,24}$/.test(p.id)) return null;
+        const inbox = parseInbox(p.inboxUrl);
+        return {
+          id: p.id,
+          legacy: Boolean(p.legacy),
+          classLabel: String(p.classLabel || '').trim().slice(0, 20) || '내 학급',
+          maxNumber: clampNumber(p.maxNumber, 30),
+          inboxUrl: inbox ? inboxUrlOf(inbox) : '',
+          requireCode: Boolean(p.requireCode),
+        };
+      }
+
+      function saveProfileStore(store) { return lsSet(PROFILE_STORE, JSON.stringify(store)); }
+
+      function loadProfileStore() {
+        const raw = lsJSON(PROFILE_STORE, null);
+        const store = { last: '', list: [] };
+        if (raw && Array.isArray(raw.list)) {
+          store.list = raw.list.map(sanitizeProfile).filter(Boolean);
+          store.last = typeof raw.last === 'string' ? raw.last : '';
+        }
+        // 학급 구분 이전 데이터(키 뒤에 학급 ID 없음)가 있으면 '기본 학급'으로 등록 — 데이터는 옮기지 않고 예전 키를 그대로 씀
+        const hasLegacy = [KEYS.pin, KEYS.records, KEYS.roster].some((k) => lsGet(k) !== null);
+        if (hasLegacy && !store.list.some((p) => p.legacy)) {
+          store.list.unshift(sanitizeProfile({
+            id: 'legacy', legacy: true, classLabel: CONFIG.CLASS_LABEL, maxNumber: CONFIG.MAX_STUDENT_NUMBER,
+            inboxUrl: CONFIG.API_URL, requireCode: CONFIG.REQUIRE_STUDENT_CODE,
+          }));
+          saveProfileStore(store);
+        }
+        return store;
+      }
+      let profileStore = loadProfileStore();
+
+      // 학급별 저장 키. 기본 학급은 예전 키(…_v4 등)를 그대로 써서 기존 데이터와 호환
+      function sk(name) {
+        const base = KEYS[name];
+        if (!profile) return `${base}::none`;
+        return profile.legacy ? base : `${base}::${profile.id}`;
+      }
+
+      // 지금 화면이 쓰는 학급 정보: 학생 링크 → 링크 값 / 교사 기기 → 열린 학급
+      function ctx() {
+        if (linkCtx) return linkCtx;
+        if (profile) return profile;
+        return { classLabel: '', maxNumber: 0, inboxUrl: '', requireCode: false };
+      }
+
+      function parseLinkContext(params) {
+        const inboxId = params.get('inbox');
+        if (!inboxId) {
+          // 학급 구분 이전에 나눠 준 링크 → 기본 학급 설정
+          return { classLabel: CONFIG.CLASS_LABEL, maxNumber: CONFIG.MAX_STUDENT_NUMBER, inboxUrl: CONFIG.API_URL, requireCode: CONFIG.REQUIRE_STUDENT_CODE };
+        }
+        const inbox = parseInbox(inboxUrlOf({ id: inboxId, domain: params.get('dom') || '' }));
+        return {
+          classLabel: String(params.get('class') || '').trim().slice(0, 20),
+          maxNumber: clampNumber(params.get('n'), MAX_NUMBER_LIMIT),
+          inboxUrl: inbox ? inboxUrlOf(inbox) : '',
+          requireCode: params.get('code') === '1',
+        };
+      }
+
+      function studentLinkFor(p) {
+        const inbox = parseInbox(p.inboxUrl);
+        if (!inbox) return '';
+        const q = new URLSearchParams({ mode: 'student', inbox: inbox.id });
+        if (inbox.domain) q.set('dom', inbox.domain);
+        q.set('class', p.classLabel);
+        q.set('n', String(p.maxNumber));
+        if (p.requireCode) q.set('code', '1');
+        return location.href.split(/[?#]/)[0] + '?' + q.toString();
+      }
+
+      function activateProfile(id) {
+        const p = profileStore.list.find((x) => x.id === id);
+        if (!p) return false;
+        if (profile !== p) {
+          profile = p;
+          saveBlocked = false;
+          appState.students = loadRoster();
+          appState.records = loadRecords();
+          appState.sync = { busy: false, lastAt: '', error: '' };
+          appState.activeFilter = '전체';
+          appState.searchQuery = '';
+          const search = $('input-search');
+          if (search) search.value = '';
+        }
+        profileStore.last = p.id;
+        saveProfileStore(profileStore);
+        applyConfigText();
+        return true;
       }
 
       /* ---------- 값 검증 ---------- */
@@ -2950,7 +3133,7 @@
 
       function loadRecords() {
         let raw;
-        try { raw = localStorage.getItem(KEYS.records); } catch (_) {
+        try { raw = localStorage.getItem(sk('records')); } catch (_) {
           saveBlocked = true;
           setTimeout(() => alert('이 브라우저에서는 저장소를 쓸 수 없습니다. (사생활 보호 모드 등)'), 0);
           return [];
@@ -2962,7 +3145,7 @@
           if (!Array.isArray(list)) throw new Error('records 배열 아님');
           return list.filter((r) => r && typeof r === 'object').map(sanitizeRecord);
         } catch (err) {
-          saveBlocked = !lsSet(`${KEYS.records}_broken_${Date.now()}`, raw);
+          saveBlocked = !lsSet(`${sk('records')}_broken_${Date.now()}`, raw);
           setTimeout(() => alert('저장된 출결 데이터를 읽지 못했습니다.\n원본은 별도로 보관했습니다. [설정 → 백업 파일로 복원]으로 복구해 주세요.'), 0);
           return [];
         }
@@ -2971,7 +3154,7 @@
       function persistRecords() {
         if (saveBlocked) { showToast('⚠️ 저장 잠금 상태입니다. 백업 파일로 복원한 뒤 사용하세요.'); return false; }
         try {
-          localStorage.setItem(KEYS.records, JSON.stringify(appState.records));
+          localStorage.setItem(sk('records'), JSON.stringify(appState.records));
           return true;
         } catch (e) {
           showToast(e.name === 'QuotaExceededError'
@@ -2982,7 +3165,7 @@
       }
 
       function loadRoster() {
-        const list = lsJSON(KEYS.roster, []);
+        const list = lsJSON(sk('roster'), []);
         if (!Array.isArray(list)) return [];
         return list.map(sanitizeStudent).filter(Boolean).sort((a, b) => a.number - b.number);
       }
@@ -3009,17 +3192,18 @@
       const rosterToText = (list) => list.map((s) => [s.number, s.name, s.studentNumber, s.gender].filter(Boolean).join(' ')).join('\n');
 
       /* ---------- 상태 ---------- */
-      function readSessionAuth() { try { return sessionStorage.getItem(KEYS.auth) === '1'; } catch (_) { return false; } }
+      // 인증된 학급 ID (같은 탭 새로고침에서만 유지)
+      function readSessionAuth() { try { return sessionStorage.getItem(KEYS.auth) || ''; } catch (_) { return ''; } }
       const defaultModalState = () => ({ studentId: '', type: '결석', category: '질병', checkInPeriod: null, contactMethod: '통화' });
 
       const appState = {
-        students: loadRoster(),
-        records: loadRecords(),
+        students: [],                 // 학급을 연 뒤 activateProfile() 에서 불러옴
+        records: [],
         selectedDate: getTodayDateString(),
         activeFilter: '전체',
         searchQuery: '',
         currentView: 'teacher',
-        isTeacherAuthenticated: readSessionAuth(), // 기본은 잠김. 같은 탭 새로고침(F5)에서만 유지
+        isTeacherAuthenticated: false, // 기본은 잠김. init() 에서 같은 탭 인증 기록이 있으면 복원
         isStudentLinkMode: false,
         modal: defaultModalState(),
         contactEdit: { recordId: '', status: '통화' },
@@ -3127,7 +3311,7 @@
           <div class="text-xs font-semibold text-slate-500 mb-1">재적 총원</div>
           <div class="flex items-baseline justify-between">
             <span class="text-2xl font-black text-slate-900">${counts.total ? counts.total + '명' : '-'}</span>
-            <span class="text-xs text-slate-400">${counts.total ? esc(CONFIG.CLASS_LABEL) : '명단 미등록'}</span>
+            <span class="text-xs text-slate-400">${counts.total ? esc(ctx().classLabel) : '명단 미등록'}</span>
           </div>
         </div>
         <div class="bg-white rounded-2xl p-4 border border-emerald-100 shadow-sm bg-emerald-50/20">
@@ -3340,9 +3524,9 @@
         if (!box) return;
         const items = [];
         if (!appState.students.length) items.push('학생 명단이 없습니다. <button type="button" data-notice="settings">명단 등록</button>');
-        if (!CONFIG.API_URL) items.push('신고함 주소(API_URL)가 비어 있어 학생 신고를 받을 수 없습니다. (설정 가이드 4단계)');
-        else if (!lsGet(KEYS.teacherKey)) items.push('신고함 교사 키가 없습니다. <button type="button" data-notice="settings">연결하기</button>');
-        const last = lsGet(KEYS.lastBackup);
+        if (!ctx().inboxUrl) items.push('학생 신고함이 연결되지 않았습니다. <button type="button" data-notice="settings">연결하기</button>');
+        else if (!lsGet(sk('teacherKey'))) items.push('신고함 교사 키가 없습니다. <button type="button" data-notice="settings">연결하기</button>');
+        const last = lsGet(sk('lastBackup'));
         const daysSince = last ? Math.floor((new Date(getTodayDateString()) - new Date(last)) / 864e5) : null;
         if (appState.records.length && (daysSince === null || daysSince >= 7)) {
           items.push(`💾 ${last ? `마지막 백업 ${daysSince}일 전` : '아직 백업한 적이 없습니다'}. <button type="button" data-notice="backup">지금 백업</button>`);
@@ -3355,7 +3539,7 @@
         const el = $('sync-status');
         const btn = $('btn-sync');
         if (!el || !btn) return;
-        const configured = CONFIG.API_URL && lsGet(KEYS.teacherKey);
+        const configured = ctx().inboxUrl && lsGet(sk('teacherKey'));
         btn.disabled = appState.sync.busy;
         btn.title = '학생들이 보낸 출결 신고를 지금 가져옵니다. (화면이 열려 있으면 자동으로 확인)';
         el.classList.remove('is-error', 'is-ok');
@@ -3531,7 +3715,7 @@
         $('modal-memo-input').value = '';
         $('modal-contacted-checkbox').checked = false;
         $('modal-contact-details').classList.add('hidden');
-        $('modal-date-subtitle').textContent = `일자: ${formatKoreanDate(appState.selectedDate)} · ${CONFIG.CLASS_LABEL}`;
+        $('modal-date-subtitle').textContent = `일자: ${formatKoreanDate(appState.selectedDate)} · ${ctx().classLabel}`;
         applyModalSelection();
         renderModalStudentChips();
         $('modal-quick-reasons').innerHTML = QUICK_REASONS.map((r) => `
@@ -3545,7 +3729,7 @@
       function chipStudents() {
         if (appState.students.length) return appState.students;
         // 명단이 없을 때는 번호만으로도 등록할 수 있게
-        return Array.from({ length: CONFIG.MAX_STUDENT_NUMBER }, (_, i) => ({ id: studentIdOf(i + 1), number: i + 1, name: '' }));
+        return Array.from({ length: ctx().maxNumber }, (_, i) => ({ id: studentIdOf(i + 1), number: i + 1, name: '' }));
       }
 
       function renderModalStudentChips() {
@@ -3595,6 +3779,7 @@
       }
 
       /* ---------- CSV / JSON 백업 · 복원 ---------- */
+      const fileLabel = () => (ctx().classLabel || '학급').replace(/[\s\\/:*?"<>|]+/g, '');
       function downloadBlob(content, type, filename) {
         const blob = new Blob([content], { type });
         const a = document.createElement('a');
@@ -3627,17 +3812,17 @@
             ];
           });
         const csv = '﻿' + [headers, ...rows].map((r) => r.map(csvCell).join(',')).join('\r\n');
-        downloadBlob(csv, 'text/csv;charset=utf-8;', `${CONFIG.CLASS_LABEL.replace(/\s+/g, '')}_출결기록_전체_${getTodayDateString()}.csv`);
+        downloadBlob(csv, 'text/csv;charset=utf-8;', `${fileLabel()}_출결기록_전체_${getTodayDateString()}.csv`);
         showToast('전체 기간 출결 기록을 CSV로 내보냈습니다.');
       }
 
       function exportBackupJSON() {
         const payload = {
           app: 'school-attendance', schema: 4, exportedAt: new Date().toISOString(),
-          classLabel: CONFIG.CLASS_LABEL, students: appState.students, records: appState.records,
+          classLabel: ctx().classLabel, students: appState.students, records: appState.records,
         };
-        downloadBlob(JSON.stringify(payload, null, 2), 'application/json', `출결백업_${CONFIG.CLASS_LABEL.replace(/\s+/g, '')}_${getTodayDateString()}.json`);
-        lsSet(KEYS.lastBackup, getTodayDateString());
+        downloadBlob(JSON.stringify(payload, null, 2), 'application/json', `출결백업_${fileLabel()}_${getTodayDateString()}.json`);
+        lsSet(sk('lastBackup'), getTodayDateString());
         renderSetupNotice();
         renderSettingsInfo();
         showToast('💾 백업 파일을 저장했습니다. 학교 PC 밖(USB·업무 드라이브)에도 보관하세요.');
@@ -3660,7 +3845,7 @@
             appState.records = [...byId.values()];
             if (students.length && (!appState.students.length || confirm('백업에 들어 있는 학생 명단으로 바꿀까요?'))) {
               appState.students = students.sort((a, b) => a.number - b.number);
-              lsSet(KEYS.roster, JSON.stringify(appState.students));
+              lsSet(sk('roster'), JSON.stringify(appState.students));
             }
             saveBlocked = false;
             if (persistRecords()) { renderApp(); renderSettingsInfo(); showToast(`✅ ${incoming.length}건 복원(병합) 완료`); }
@@ -3679,15 +3864,18 @@
         bad_code: '개인 확인 코드가 맞지 않습니다.',
         denied: '교사 키가 맞지 않습니다.',
         busy: '신고가 몰려 있어요. 잠시 후 다시 시도해 주세요.',
+        not_setup: '신고함 설정이 끝나지 않았습니다. 신고함 시트의 Apps Script 에서 setup 을 실행했는지 확인하세요.',
       };
 
       async function callApi(body) {
-        if (!CONFIG.API_URL) throw new Error('신고함 주소(API_URL)가 설정되지 않았습니다.');
+        const inboxUrl = ctx().inboxUrl;
+        if (!inboxUrl) throw new Error('학생 신고함 주소가 설정되지 않았습니다.');
+        const url = CONFIG.DEV_API_OVERRIDE ? `${CONFIG.DEV_API_OVERRIDE}?to=${encodeURIComponent(inboxUrl)}` : inboxUrl;
         const ctrl = new AbortController();
         const timer = setTimeout(() => ctrl.abort(), 20000);
         try {
           // text/plain 으로 보내야 CORS 사전 요청 없이 Apps Script 와 통신됩니다.
-          const res = await fetch(CONFIG.API_URL, {
+          const res = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify(body),
@@ -3700,7 +3888,7 @@
         } catch (e) {
           if (e.name === 'AbortError') throw new Error('응답 시간이 초과되었습니다.');
           if (e.name === 'SyntaxError') throw new Error('신고함 응답을 읽을 수 없습니다. (웹 앱 액세스 권한이 \'모든 사용자\'인지 확인)');
-          if (e instanceof TypeError) throw new Error('신고함에 연결할 수 없습니다. (인터넷 연결 · API_URL 확인)');
+          if (e instanceof TypeError) throw new Error('신고함에 연결할 수 없습니다. (인터넷 연결 · 신고함 주소 확인)');
           throw e;
         } finally {
           clearTimeout(timer);
@@ -3729,8 +3917,8 @@
       }
 
       async function fetchReports({ silent = false } = {}) {
-        const key = lsGet(KEYS.teacherKey, '');
-        if (!CONFIG.API_URL || !key) {
+        const key = lsGet(sk('teacherKey'), '');
+        if (!ctx().inboxUrl || !key) {
           if (!silent) showToast('⚙️ 설정에서 신고함 연결(교사 키)을 먼저 해 주세요.');
           renderSyncStatus();
           return;
@@ -3740,7 +3928,7 @@
         renderSyncStatus();
         try {
           const data = await callApi({ action: 'list', key });
-          const seen = new Set(lsJSON(KEYS.seenReports, []));
+          const seen = new Set(lsJSON(sk('seenReports'), []));
           const fresh = [];
           (data.reports || []).forEach((rp) => {
             if (!rp || typeof rp.id !== 'string' || !/^[\w-]{1,60}$/.test(rp.id) || seen.has(rp.id)) return;
@@ -3754,7 +3942,7 @@
               throw new Error('받은 신고를 저장하지 못했습니다.');
             }
             fresh.forEach((f) => seen.add(f.rp.id)); // 저장에 성공한 뒤에만 '받음' 표시
-            lsSet(KEYS.seenReports, JSON.stringify([...seen].slice(-3000)));
+            lsSet(sk('seenReports'), JSON.stringify([...seen].slice(-3000)));
             renderApp();
             showToast(`📥 학생 신고 ${fresh.length}건을 새로 받았습니다.`);
           } else if (!silent) {
@@ -3772,9 +3960,9 @@
       }
 
       async function purgeServerReports() {
-        const key = lsGet(KEYS.teacherKey, '');
-        const ids = lsJSON(KEYS.seenReports, []);
-        if (!CONFIG.API_URL || !key) { showToast('신고함이 연결되어 있지 않습니다.'); return; }
+        const key = lsGet(sk('teacherKey'), '');
+        const ids = lsJSON(sk('seenReports'), []);
+        if (!ctx().inboxUrl || !key) { showToast('신고함이 연결되어 있지 않습니다.'); return; }
         if (!ids.length) { showToast('이 기기에서 받아온 신고가 없습니다.'); return; }
         if (!confirm('이 기기에 이미 받아온 신고를 서버(구글 시트)에서 삭제합니다.\n태블릿 등 다른 기기에서 아직 받지 않았다면 그 기기에서는 받을 수 없습니다. 계속할까요?')) return;
         try {
@@ -3787,14 +3975,18 @@
 
       async function saveAndTestTeacherKey() {
         const key = $('teacher-key-input').value.trim();
-        if (!key) { lsDel(KEYS.teacherKey); renderSettingsInfo(); renderApp(); showToast('교사 키를 지웠습니다.'); return; }
-        lsSet(KEYS.teacherKey, key);
+        if (!key) { lsDel(sk('teacherKey')); renderSettingsInfo(); renderApp(); showToast('교사 키를 지웠습니다.'); return; }
+        lsSet(sk('teacherKey'), key);
         const badge = $('api-state');
         badge.textContent = '확인 중…';
         badge.className = 'x-badge';
         try {
           const data = await callApi({ action: 'ping', key });
-          badge.textContent = `연결됨 · 대기 ${data.pending ?? 0}건`;
+          if (typeof data.requireCode === 'boolean' && profile && profile.requireCode !== data.requireCode) {
+            profile.requireCode = data.requireCode;   // 학생 링크에 code=1 이 붙도록
+            saveProfileStore(profileStore);
+          }
+          badge.textContent = `연결됨 · 대기 ${data.pending ?? 0}건${data.requireCode ? ' · 확인 코드 사용' : ''}`;
           badge.className = 'x-badge is-ok';
           renderApp();
           fetchReports({ silent: true });
@@ -3808,17 +4000,24 @@
       /* ---------- 설정 모달 ---------- */
       function renderSettingsInfo() {
         $('roster-count').textContent = `${appState.students.length}명`;
+        const cls = $('class-state');
+        cls.textContent = ctx().inboxUrl ? '신고함 연결됨' : '교사용만 (신고함 없음)';
+        cls.className = ctx().inboxUrl ? 'x-badge is-ok' : 'x-badge';
         const badge = $('api-state');
-        if (!CONFIG.API_URL) { badge.textContent = 'API_URL 미설정'; badge.className = 'x-badge is-error'; }
-        else if (!lsGet(KEYS.teacherKey)) { badge.textContent = '교사 키 없음'; badge.className = 'x-badge'; }
+        if (!ctx().inboxUrl) { badge.textContent = '신고함 주소 없음'; badge.className = 'x-badge is-error'; }
+        else if (!lsGet(sk('teacherKey'))) { badge.textContent = '교사 키 없음'; badge.className = 'x-badge'; }
         else if (!badge.classList.contains('is-ok')) { badge.textContent = '키 저장됨'; badge.className = 'x-badge'; }
-        const last = lsGet(KEYS.lastBackup);
+        const last = lsGet(sk('lastBackup'));
         $('last-backup-text').textContent = last ? `마지막 백업: ${last}` : '아직 백업한 적이 없습니다.';
       }
 
       function openSettings() {
+        if (!profile) return;
+        $('class-label-input').value = profile.classLabel;
+        $('class-max-input').value = String(profile.maxNumber);
+        $('inbox-url-input').value = profile.inboxUrl;
         $('roster-input').value = rosterToText(appState.students);
-        $('teacher-key-input').value = lsGet(KEYS.teacherKey, '');
+        $('teacher-key-input').value = lsGet(sk('teacherKey'), '');
         renderSettingsInfo();
         $('modal-settings').classList.remove('hidden');
       }
@@ -3828,7 +4027,7 @@
         const parsed = parseRosterText(text);
         if (!parsed.length && text.trim()) { showToast('⚠️ 명단을 읽지 못했습니다. "번호 이름" 형식인지 확인해 주세요.'); return; }
         if (!confirm(`학생 ${parsed.length}명으로 명단을 저장할까요?\n(${parsed.slice(0, 3).map((s) => `${s.number}번 ${s.name}`).join(', ')}${parsed.length > 3 ? ' …' : ''})`)) return;
-        if (!lsSet(KEYS.roster, JSON.stringify(parsed))) { showToast('⚠️ 명단 저장에 실패했습니다.'); return; }
+        if (!lsSet(sk('roster'), JSON.stringify(parsed))) { showToast('⚠️ 명단 저장에 실패했습니다.'); return; }
         appState.students = parsed;
         $('roster-input').value = rosterToText(parsed);
         renderSettingsInfo();
@@ -3836,8 +4035,57 @@
         showToast(`✅ 학생 ${parsed.length}명 명단을 저장했습니다.`);
       }
 
+      function saveClassInfo() {
+        if (!profile) return;
+        const label = $('class-label-input').value.trim().slice(0, 20);
+        const max = clampNumber($('class-max-input').value, 0);
+        const urlText = $('inbox-url-input').value.trim();
+        if (!label) { showToast('학급 이름을 입력해 주세요.'); return; }
+        if (!max) { showToast(`마지막 출석 번호는 1~${MAX_NUMBER_LIMIT} 사이로 입력해 주세요.`); return; }
+        const inbox = urlText ? parseInbox(urlText) : null;
+        if (urlText && !inbox) { showToast('⚠️ 신고함 주소 형식이 아닙니다. https://script.google.com/…/exec 주소를 그대로 붙여넣으세요.'); return; }
+        const newUrl = inbox ? inboxUrlOf(inbox) : '';
+        const inboxChanged = newUrl !== profile.inboxUrl;
+        const before = { ...profile };
+        Object.assign(profile, { classLabel: label, maxNumber: max, inboxUrl: newUrl });
+        if (inboxChanged) profile.requireCode = false; // 새 신고함은 연결 테스트로 다시 확인
+        if (!saveProfileStore(profileStore)) { Object.assign(profile, before); showToast('⚠️ 학급 정보를 저장하지 못했습니다.'); return; }
+        if (inboxChanged) {
+          appState.sync = { busy: false, lastAt: '', error: '' };
+          $('api-state').className = 'x-badge';
+        }
+        applyConfigText();
+        renderSettingsInfo();
+        renderApp();
+        showToast(inboxChanged && newUrl ? '✅ 저장했습니다. 이제 [3. 학생 신고함 연결]에서 교사 키를 연결하세요.' : '✅ 학급 정보를 저장했습니다.');
+      }
+
+      function deleteClassOnThisDevice() {
+        if (!profile) return;
+        const target = profile;
+        const label = target.classLabel;
+        if (!confirm(`'${label}' 학급의 출결 기록·명단·PIN·교사 키를 이 기기에서 모두 지웁니다.
+먼저 JSON 백업을 받아 두셨나요? (구글 시트 신고함은 지워지지 않습니다)`)) return;
+        const typed = prompt(`정말 지우려면 학급 이름 '${label}' 을(를) 그대로 입력하세요.`);
+        if (typed === null || typed.trim() !== label) { showToast('학급 이름이 달라 삭제를 취소했습니다.'); return; }
+        ['records', 'roster', 'pin', 'pinFail', 'teacherKey', 'seenReports', 'lastBackup'].forEach((k) => lsDel(sk(k)));
+        profileStore.list = profileStore.list.filter((p) => p !== target);
+        profileStore.last = profileStore.list.length ? profileStore.list[0].id : '';
+        saveProfileStore(profileStore);
+        switchToStudentView();   // 먼저 잠금
+        profile = null;
+        appState.records = [];
+        appState.students = [];
+        if (profileStore.last) activateProfile(profileStore.last);
+        initStudentPortalForm();
+        applyConfigText();
+        showToast(`'${label}' 학급을 이 기기에서 삭제했습니다.`);
+        requestTeacherAccess();
+      }
+
       async function copyStudentLink() {
-        const url = location.href.split(/[?#]/)[0] + '?mode=student';
+        const url = profile ? studentLinkFor(profile) : '';
+        if (!url) { showToast('먼저 [1. 학급 정보]에 학생 신고함 주소를 저장하세요.'); return; }
         try {
           await navigator.clipboard.writeText(url);
           showToast('📋 학생용 링크를 복사했습니다.');
@@ -3857,24 +4105,24 @@
       }
       function setAuthenticated(on) {
         appState.isTeacherAuthenticated = on;
-        try { if (on) sessionStorage.setItem(KEYS.auth, '1'); else sessionStorage.removeItem(KEYS.auth); } catch (_) { /* 무시 */ }
+        try { if (on && profile) sessionStorage.setItem(KEYS.auth, profile.id); else sessionStorage.removeItem(KEYS.auth); } catch (_) { /* 무시 */ }
         resetIdle();
       }
       const setTeacherControls = (visible) => document.querySelectorAll('.teacher-only-ctrl').forEach((el) => el.classList.toggle('hidden', !visible));
-      const hideAllModals = () => ['modal-container', 'modal-contact-edit', 'modal-settings', 'modal-pin-change', 'modal-pin-auth']
+      const hideAllModals = () => ['modal-container', 'modal-contact-edit', 'modal-settings', 'modal-pin-change', 'modal-pin-auth', 'modal-profile-new']
         .forEach((id) => $(id)?.classList.add('hidden'));
 
       function initStudentPortalForm() {
         const today = getTodayDateString();
         const sel = $('student-form-number');
         sel.innerHTML = '<option value="">번호 선택</option>'
-          + Array.from({ length: CONFIG.MAX_STUDENT_NUMBER }, (_, i) => `<option value="${i + 1}">${i + 1}번</option>`).join('');
+          + Array.from({ length: ctx().maxNumber }, (_, i) => `<option value="${i + 1}">${i + 1}번</option>`).join('');
         const dateInput = $('student-form-date');
         dateInput.value = today;
         dateInput.min = addDays(today, -7);
         dateInput.max = addDays(today, 14);
-        $('student-code-box').classList.toggle('hidden', !CONFIG.REQUIRE_STUDENT_CODE);
-        $('student-form-code').required = CONFIG.REQUIRE_STUDENT_CODE;
+        $('student-code-box').classList.toggle('hidden', !ctx().requireCode);
+        $('student-form-code').required = ctx().requireCode;
         appState.portal.type = '결석';
         document.querySelectorAll('#student-form-type-group .btn-portal-type').forEach((b) => { b.className = b.dataset.val === '결석' ? CLS.portalOn : CLS.portalOff; });
         $('student-portal-late-box').classList.add('hidden');
@@ -3930,7 +4178,14 @@
       function requestTeacherAccess() {
         if (appState.isStudentLinkMode) return;
         if (appState.isTeacherAuthenticated) { switchToTeacherView(); return; }
-        if (!lsGet(KEYS.pin)) { openPinChange(true); return; } // 기본 PIN(1234) 없이 처음 사용 시 직접 설정
+        if (!profileStore.list.length) { openProfileNew(); return; } // 이 기기에 학급이 없으면 새로 만들기
+        const sel = $('pin-class-select');
+        sel.innerHTML = profileStore.list.map((p) => `<option value="${esc(p.id)}">${esc(p.classLabel)}</option>`).join('');
+        sel.value = (profile && profile.id) || profileStore.last;
+        if (!sel.value) sel.value = profileStore.list[0].id;
+        $('pin-class-box').classList.toggle('hidden', profileStore.list.length < 2);
+        activateProfile(sel.value);
+        if (!lsGet(sk('pin'))) { openPinChange(true); return; } // PIN 이 없는 학급: 기본 PIN 없이 직접 설정
         $('input-pin-code').value = '';
         $('pin-error-msg').classList.add('hidden');
         $('modal-pin-auth').classList.remove('hidden');
@@ -3938,20 +4193,51 @@
       }
 
       function readPinFail() {
-        const f = lsJSON(KEYS.pinFail, null);
+        const f = lsJSON(sk('pinFail'), null);
         return f && typeof f.n === 'number' ? f : { n: 0, until: 0 };
+      }
+
+      function openProfileNew() {
+        $('modal-pin-auth').classList.add('hidden');
+        ['new-class-label', 'new-class-pin', 'new-class-pin2'].forEach((id) => { $(id).value = ''; });
+        $('new-class-max').value = '30';
+        $('modal-profile-new').classList.remove('hidden');
+        setTimeout(() => $('new-class-label').focus(), 100);
+      }
+
+      function createProfile(e) {
+        e.preventDefault();
+        const label = $('new-class-label').value.trim().slice(0, 20);
+        const max = clampNumber($('new-class-max').value, 0);
+        const pin = $('new-class-pin').value.trim();
+        if (!label) { showToast('학급 이름을 입력해 주세요.'); return; }
+        if (!max) { showToast(`마지막 출석 번호는 1~${MAX_NUMBER_LIMIT} 사이로 입력해 주세요.`); return; }
+        if (!/^\d{4}$/.test(pin)) { showToast('PIN은 숫자 4자리여야 합니다.'); return; }
+        if (WEAK_PINS.includes(pin)) { showToast('너무 쉬운 번호입니다. 다른 번호를 골라 주세요.'); return; }
+        if (pin !== $('new-class-pin2').value.trim()) { showToast('PIN 확인이 일치하지 않습니다.'); return; }
+        const p = sanitizeProfile({ id: newProfileId(), classLabel: label, maxNumber: max });
+        profileStore.list.push(p);
+        if (!saveProfileStore(profileStore)) { profileStore.list.pop(); showToast('⚠️ 학급을 저장하지 못했습니다.'); return; }
+        activateProfile(p.id);
+        if (!lsSet(sk('pin'), pin)) { showToast('⚠️ PIN을 저장하지 못했습니다.'); return; }
+        $('modal-profile-new').classList.add('hidden');
+        setAuthenticated(true);
+        switchToTeacherView();
+        openSettings();
+        showToast(`✅ '${label}' 학급을 만들었습니다. 명단과 학생 신고함을 연결해 주세요.`);
       }
 
       function verifyPin(e) {
         e.preventDefault();
+        activateProfile($('pin-class-select').value || (profile && profile.id));
         const f = readPinFail();
         if (Date.now() < f.until) {
           showToast(`⏳ ${Math.ceil((f.until - Date.now()) / 1000)}초 후 다시 시도하세요.`);
           return;
         }
         const input = $('input-pin-code');
-        if (input.value.trim() === lsGet(KEYS.pin)) {
-          lsDel(KEYS.pinFail);
+        if (input.value.trim() === lsGet(sk('pin'))) {
+          lsDel(sk('pinFail'));
           setAuthenticated(true);
           $('modal-pin-auth').classList.add('hidden');
           switchToTeacherView();
@@ -3959,7 +4245,7 @@
         } else {
           f.n += 1;
           if (f.n % 5 === 0) f.until = Date.now() + 30000 * 2 ** (f.n / 5 - 1); // 5회마다 30초 → 60초 → 120초 …
-          lsSet(KEYS.pinFail, JSON.stringify(f));
+          lsSet(sk('pinFail'), JSON.stringify(f));
           $('pin-error-msg').classList.remove('hidden');
           input.value = '';
           input.focus();
@@ -3971,11 +4257,11 @@
         const cur = $('input-current-pin').value.trim();
         const next = $('input-new-pin').value.trim();
         const again = $('input-new-pin-confirm').value.trim();
-        if (!pinSetupMode && cur !== lsGet(KEYS.pin)) { showToast('현재 PIN 번호가 일치하지 않습니다.'); return; }
+        if (!pinSetupMode && cur !== lsGet(sk('pin'))) { showToast('현재 PIN 번호가 일치하지 않습니다.'); return; }
         if (!/^\d{4}$/.test(next)) { showToast('새 PIN 번호는 숫자 4자리여야 합니다.'); return; }
-        if (['0000', '1234', '1111'].includes(next)) { showToast('너무 쉬운 번호입니다. 다른 번호를 골라 주세요.'); return; }
+        if (WEAK_PINS.includes(next)) { showToast('너무 쉬운 번호입니다. 다른 번호를 골라 주세요.'); return; }
         if (next !== again) { showToast('새 PIN 번호 확인이 일치하지 않습니다.'); return; }
-        if (!lsSet(KEYS.pin, next)) { showToast('⚠️ PIN을 저장하지 못했습니다.'); return; }
+        if (!lsSet(sk('pin'), next)) { showToast('⚠️ PIN을 저장하지 못했습니다.'); return; }
         $('modal-pin-change').classList.add('hidden');
         if (pinSetupMode) {
           setAuthenticated(true);
@@ -4013,16 +4299,16 @@
           category: $('student-form-category').value,
           reason,
           period: appState.portal.type === '지각' ? (Number($('student-form-period').value) || null) : null,
-          code: CONFIG.REQUIRE_STUDENT_CODE ? $('student-form-code').value.trim() : '',
+          code: ctx().requireCode ? $('student-form-code').value.trim() : '',
         };
         const btn = $('btn-student-submit');
         const btnText = $('btn-student-submit-text');
         btn.disabled = true;
         btnText.textContent = '보내는 중…';
         try {
-          if (CONFIG.API_URL) await callApi(payload);
-          else if (!appState.isStudentLinkMode) addLocalStudentReport(payload);
-          else throw new Error('아직 신고함이 연결되지 않았습니다.');
+          if (ctx().inboxUrl) await callApi(payload);
+          else if (!appState.isStudentLinkMode && profile) addLocalStudentReport(payload);
+          else throw new Error('신고함 정보가 없는 링크입니다. 담임선생님께 새 링크를 받아 주세요.');
           $('form-student-submit').classList.add('hidden');
           $('receipt-details-text').textContent = `${date} ${number}번 학생의 ${payload.type}(${payload.category}) 신고가 접수되었습니다.`;
           $('student-portal-receipt').classList.remove('hidden');
@@ -4103,6 +4389,20 @@
           e.target.value = '';
         });
         $('btn-open-pin-setting').addEventListener('click', () => openPinChange(false));
+        $('btn-save-class').addEventListener('click', saveClassInfo);
+        $('btn-delete-class').addEventListener('click', deleteClassOnThisDevice);
+
+        // 학급 선택 · 새 학급
+        $('btn-new-class').addEventListener('click', openProfileNew);
+        $('btn-close-profile-new').addEventListener('click', () => $('modal-profile-new').classList.add('hidden'));
+        $('form-profile-new').addEventListener('submit', createProfile);
+        $('pin-class-select').addEventListener('change', (e) => {
+          activateProfile(e.target.value);
+          initStudentPortalForm();
+          $('pin-error-msg').classList.add('hidden');
+          if (!lsGet(sk('pin'))) { $('modal-pin-auth').classList.add('hidden'); openPinChange(true); }
+          else $('input-pin-code').focus();
+        });
 
         // PIN
         $('form-pin-verify').addEventListener('submit', verifyPin);
@@ -4207,7 +4507,7 @@
         // Esc 로 맨 위 모달 닫기
         document.addEventListener('keydown', (e) => {
           if (e.key !== 'Escape') return;
-          const open = ['modal-pin-change', 'modal-contact-edit', 'modal-container', 'modal-settings', 'modal-pin-auth']
+          const open = ['modal-pin-change', 'modal-profile-new', 'modal-contact-edit', 'modal-container', 'modal-settings', 'modal-pin-auth']
             .map($).find((m) => m && !m.classList.contains('hidden'));
           open?.classList.add('hidden');
         });
@@ -4229,8 +4529,15 @@
           if (!document.hidden && appState.isTeacherAuthenticated && appState.currentView === 'teacher') fetchReports({ silent: true });
         }, CONFIG.AUTO_SYNC_SECONDS * 1000);
         window.addEventListener('storage', (e) => {
-          if (e.key === KEYS.records) appState.records = loadRecords();
-          else if (e.key === KEYS.roster) appState.students = loadRoster();
+          if (e.key === PROFILE_STORE) {
+            profileStore = loadProfileStore();
+            if (profile) profile = profileStore.list.find((p) => p.id === profile.id) || profile;
+            applyConfigText();
+            return;
+          }
+          if (!profile) return;
+          if (e.key === sk('records')) appState.records = loadRecords();
+          else if (e.key === sk('roster')) appState.students = loadRoster();
           else return;
           renderApp();
         });
@@ -4238,26 +4545,41 @@
 
       /* ---------- 시작 ---------- */
       function applyConfigText() {
-        const map = { classLabel: CONFIG.CLASS_LABEL, teacherName: CONFIG.TEACHER_NAME, retentionDays: CONFIG.RETENTION_DAYS };
+        const map = { classLabel: ctx().classLabel, teacherName: CONFIG.TEACHER_NAME, retentionDays: CONFIG.RETENTION_DAYS };
         document.querySelectorAll('[data-cfg]').forEach((el) => { el.textContent = map[el.dataset.cfg] ?? el.textContent; });
       }
 
       function init() {
-        applyConfigText();
         bindEvents();
-        const mode = new URLSearchParams(location.search).get('mode');
+        const params = new URLSearchParams(location.search);
+        const mode = params.get('mode');
         appState.isStudentLinkMode = mode === 'student' || mode === 'parent';
         if (appState.isStudentLinkMode) {
-          document.title = `${CONFIG.CLASS_LABEL} 출결 신고`;
+          // 학생 휴대폰: 이 기기의 교사 데이터는 읽지 않고 링크에 담긴 학급 정보만 사용
+          linkCtx = parseLinkContext(params);
+          applyConfigText();
+          document.title = `${ctx().classLabel || '학급'} 출결 신고`;
           $('app-header').classList.add('hidden');   // 링크 모드에서는 헤더에 남는 것이 없음
           $('return-teacher-wrap').classList.add('hidden');
           switchToStudentView();
-        } else if (appState.isTeacherAuthenticated) {
-          switchToTeacherView();
-        } else {
-          switchToStudentView();
-          requestTeacherAccess();
+          if (!ctx().inboxUrl) {
+            $('btn-student-submit').disabled = true;
+            $('btn-student-submit-text').textContent = '링크가 올바르지 않습니다 — 담임선생님께 새 링크를 받아 주세요';
+          }
+          return;
         }
+        const authed = readSessionAuth();
+        if (authed && activateProfile(authed)) {
+          appState.isTeacherAuthenticated = true;
+          resetIdle();
+          switchToTeacherView();
+          return;
+        }
+        const fallback = profileStore.list.some((p) => p.id === profileStore.last) ? profileStore.last : (profileStore.list[0] || {}).id;
+        if (fallback) activateProfile(fallback);   // 잠긴 상태의 교실 키오스크 학생 폼이 쓸 학급
+        applyConfigText();
+        switchToStudentView();
+        requestTeacherAccess();
       }
 
       init();
